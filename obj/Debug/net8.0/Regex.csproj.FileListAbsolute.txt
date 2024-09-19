@@ -1,0 +1,14 @@
+D:\Github\Regex\bin\Debug\net8.0\Regex.exe
+D:\Github\Regex\bin\Debug\net8.0\Regex.deps.json
+D:\Github\Regex\bin\Debug\net8.0\Regex.runtimeconfig.json
+D:\Github\Regex\bin\Debug\net8.0\Regex.dll
+D:\Github\Regex\bin\Debug\net8.0\Regex.pdb
+D:\Github\Regex\obj\Debug\net8.0\Regex.GeneratedMSBuildEditorConfig.editorconfig
+D:\Github\Regex\obj\Debug\net8.0\Regex.AssemblyInfoInputs.cache
+D:\Github\Regex\obj\Debug\net8.0\Regex.AssemblyInfo.cs
+D:\Github\Regex\obj\Debug\net8.0\Regex.csproj.CoreCompileInputs.cache
+D:\Github\Regex\obj\Debug\net8.0\Regex.dll
+D:\Github\Regex\obj\Debug\net8.0\refint\Regex.dll
+D:\Github\Regex\obj\Debug\net8.0\Regex.pdb
+D:\Github\Regex\obj\Debug\net8.0\Regex.genruntimeconfig.cache
+D:\Github\Regex\obj\Debug\net8.0\ref\Regex.dll
