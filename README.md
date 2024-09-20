@@ -1,5 +1,5 @@
 
-**A Regular expression engine that supports recognize() & match() with some meta-characters**
+**A Regular expression engine that supports:**
 
 **Recognize, if the engine accept that input:**\
 Trace.Assert(Regex.Recognize("A*", "") == true);\
