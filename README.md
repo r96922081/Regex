@@ -1,4 +1,5 @@
 
+
 **A [Regular Expression Engine] that supports:**
 
 **Recognize, if the engine accept that input:**\
@@ -29,6 +30,8 @@ Trace.Assert(Regex.Match("^AB+$", "XABB") == "");
 {2-4} occurrence, 2 - 4 times\
 ^ begin with\
 $ end with
+
+**Performance is not optimized**
 
 **Reference: Algorithhms 4th Edition by Robert Sedgewick, Kevin Wayne**
 
