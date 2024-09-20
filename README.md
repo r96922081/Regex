@@ -11,7 +11,7 @@ Trace.Assert(Regex.Recognize("A+B?", "AABB") == false);\
 Trace.Assert(Regex.Recognize("AB{2-4}", "ABBBB") == true);\
 Trace.Assert(Regex.Recognize("AB{2-4}", "ABBBBBBB") == false);
 
-**Match, find the longest match sub-string from input:**\
+**Match, find the first longest match sub-string from input:**\
 Trace.Assert(Regex.Match("A*", "AAAAB") == "AAAA");\
 Trace.Assert(Regex.Match("A*", "B") == "");\
 Trace.Assert(Regex.Match("AB{2}", "ABBBBB") == "ABB");\
