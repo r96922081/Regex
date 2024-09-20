@@ -3,7 +3,7 @@
   "WorkspaceRootPath": "D:\\Github\\Regex\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|d:\\github\\regex\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -11,15 +11,15 @@
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:regex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|d:\\github\\regex\\nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|d:\\github\\regex\\ut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\ut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:ut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|d:\\github\\regex\\todo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\todo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:todo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -47,8 +47,7 @@
               "ViewState": "AQIAADMAAAAAAAAAAAAAAAoAAAAHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T14:03:36.86Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -60,8 +59,7 @@
               "RelativeToolTip": "Todo.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-20T13:09:29.509Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-20T13:09:29.509Z"
             },
             {
               "$type": "Document",
@@ -73,8 +71,7 @@
               "RelativeToolTip": "NFA.cs",
               "ViewState": "AQIAACQAAAAAAAAAAAAAADcAAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-20T12:13:30.626Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-20T12:13:30.626Z"
             },
             {
               "$type": "Document",
@@ -86,8 +83,7 @@
               "RelativeToolTip": "Regex.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-19T14:03:34.203Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-19T14:03:34.203Z"
             },
             {
               "$type": "Document",
@@ -99,8 +95,7 @@
               "RelativeToolTip": "Decorator.cs",
               "ViewState": "AQIAAGQAAAAAAAAAAAD4v3wAAAAUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-19T14:03:23.232Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-19T14:03:23.232Z"
             },
             {
               "$type": "Document",
@@ -110,7 +105,7 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "D:\\Github\\Regex\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAB0AAAAFAAAA",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T14:02:48.947Z",
               "EditorCaption": ""
