@@ -31,7 +31,6 @@ Trace.Assert(Regex.Match("^AB+$", "XABB") == "");
 ^ begin with\
 $ end with
 
-**Performance is not optimized**
 
-**Reference: Algorithhms 4th Edition by Robert Sedgewick, Kevin Wayne**
-
+**Remark1: Code is not optimized**
+**Remark2: Robert Sedgewick, Kevin Wayne, *Algorithhms*, 4th Edition**
