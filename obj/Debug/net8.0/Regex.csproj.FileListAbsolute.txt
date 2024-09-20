@@ -12,3 +12,4 @@ D:\Github\Regex\obj\Debug\net8.0\refint\Regex.dll
 D:\Github\Regex\obj\Debug\net8.0\Regex.pdb
 D:\Github\Regex\obj\Debug\net8.0\Regex.genruntimeconfig.cache
 D:\Github\Regex\obj\Debug\net8.0\ref\Regex.dll
+D:\Github\Regex\obj\Debug\net8.0\Regex.sourcelink.json

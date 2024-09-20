@@ -4,6 +4,8 @@
     {
         string newRe = "";
 
+        re = Unescape(re);
+
         List<string> tokens = SplitToken(re);
 
         for (int i = 0; i < tokens.Count; i++)
@@ -85,6 +87,50 @@
         }
 
         newRe = DecorateOr(newRe);
+
+        return newRe;
+    }
+
+    public static string Unescape(string re)
+    {
+        string newRe = "";
+
+        for (int i = 0; i < re.Length; i++)
+        {
+            char c = re[i];
+            if (c != '\\')
+            {
+                newRe += c;
+            }
+            else
+            {
+                char c2 = re[i + 1];
+                if (c2 == 'n')
+                {
+                    newRe += "\n";
+                    i++;
+                }
+                else if (c2 == 'r')
+                {
+                    newRe += "\r";
+                    i++;
+                }
+                else if (c2 == 't')
+                {
+                    newRe += "\t";
+                    i++;
+                }
+                else if (c2 == '\\')
+                {
+                    newRe += "\\";
+                    i++;
+                }
+                else
+                {
+                    newRe += "\\";
+                }
+            }
+        }
 
         return newRe;
     }

@@ -8,15 +8,7 @@ public class Ut
             Trace.Assert(false);
     }
 
-    // todo
-    // Regex class, with
-    // List<sring> Match()
-    // bool Recognize()
-
-    // \t, \n
-    // ^ => begin with
-    // $ => end with
-    // [A-Za-z]
+    // 
     public void RunAllUt()
     {
         UtNfa();
@@ -33,10 +25,29 @@ public class Ut
         Check(nfa.Match("AAABC") == "AAA");
         Check(nfa.Match("B") == "");
 
+        nfa = NFA.Build("AB");
+        Check(nfa.Match("A") == "");
+        Check(nfa.Match("AAABB") == "AB");
+        Check(nfa.Match("XABAAA") == "AB");
+
         nfa = NFA.Build("(AB)+");
         Check(nfa.Match("A") == "");
         Check(nfa.Match("ABB") == "AB");
         Check(nfa.Match("ABABABB") == "ABABAB");
+        Check(nfa.Match("XABABABB") == "ABABAB");
+
+        nfa = NFA.Build("^AB+");
+        Check(nfa.Match("ABBBC") == "ABBB");
+        Check(nfa.Match("XAB") == "");
+
+        nfa = NFA.Build("AB+$");
+        Check(nfa.Match("CABBB") == "ABBB");
+        Check(nfa.Match("ABBBC") == "");
+
+        nfa = NFA.Build("^AB+$");
+        Check(nfa.Match("ABBB") == "ABBB");
+        Check(nfa.Match("ABBBC") == "");
+        Check(nfa.Match("CABBB") == "");
     }
 
 
@@ -53,6 +64,13 @@ public class Ut
         Check(nfa.Recognize("AB") == true);
         Check(nfa.Recognize("AABAAB") == true);
         Check(nfa.Recognize("ABBC") == false);
+
+
+        // support both \t and \\t to represent tab for working with lexer
+        nfa = NFA.Build("A\tB\nC\rD\\E");
+        Check(nfa.Recognize("A\tB\nC\rD\\E") == true);
+        nfa = NFA.Build("A\\tB\\nC\\rD\\\\E");
+        Check(nfa.Recognize("A\tB\nC\rD\\E") == true);
     }
 
     private void UtSplitToken()

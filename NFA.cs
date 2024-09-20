@@ -15,6 +15,8 @@ public class NFA
 {
     public State startState = null;
     public State acceptedState = null;
+    public bool beginWith = false;
+    public bool endWith = false;
 
     // case 1: AB
     // case 2: A*
@@ -41,6 +43,18 @@ public class NFA
     public static NFA Build(string re)
     {
         NFA nfa = new NFA();
+
+        if (re.Length > 0 && re[0] == '^')
+        {
+            nfa.beginWith = true;
+            re = re.Substring(1);
+        }
+
+        if (re.Length > 0 && re[re.Length - 1] == '$')
+        {
+            nfa.endWith = true;
+            re = re.Substring(0, re.Length - 1);
+        }
 
         re = Decorator.Decorate(re);
 
@@ -114,8 +128,28 @@ public class NFA
         return nfa;
     }
 
-    // find longest match from position 0
+
     public string Match(string txt)
+    {
+        for (int i = 0; i < txt.Length; i++)
+        {
+            string matchString = MatchInternal(txt.Substring(i));
+
+            // found match
+            if (matchString != "")
+            {
+                if (beginWith == true && i != 0)
+                    continue;
+                if (endWith == true && i + matchString.Length != txt.Length)
+                    continue;
+                return matchString;
+            }
+        }
+
+        return "";
+    }
+
+    public string MatchInternal(string txt)
     {
         List<State> availableStates = new List<State>();
         availableStates.Add(startState);
