@@ -1,3 +1,4 @@
+
 **A [Regular Expression Engine] that supports:**
 
 **Recognize, if the engine accept that input:**
@@ -43,7 +44,24 @@ A? = (|A)\
 A{2-4} = (AA|AAA|AAAA)\
 \
 **Build NFA**\
-...\
+(1) Add state for each char of regular expression
+(2) Add additional start & accept state
+(3) Add alphabet transition for alphabet (solid line)
+(4) Add ε transition for meta charater *, (, ), | (dashed line)
+&nbsp;&nbsp;&nbsp;&nbsp;(4.1) For (, ), * add ε transition to next state
+&nbsp;&nbsp;&nbsp;&nbsp;(4.2) For * not after ()
+&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa2.png)
+&nbsp;&nbsp;&nbsp;&nbsp;(4.3) For * after ()
+&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa3.png)
+&nbsp;&nbsp;&nbsp;&nbsp;(4.4) For | 
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa4.png)
+
+&nbsp;&nbsp;&nbsp;&nbsp;(4.5) Complete example of RE = AB*
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa1.png)
+&nbsp;&nbsp;&nbsp;&nbsp;(4.6) Complete example of RE = (AB)*
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa5.png)
+&nbsp;&nbsp;&nbsp;&nbsp;(4.7) Complete example of RE = (A|B)C
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa6.png)
 ...\
 **Transit State**\
 Assume input is "AB", then the transit order is \
@@ -52,7 +70,7 @@ If states become empty after any transition, then this input is not accpeted \
 If there is one state is accepted state after doing above 5 transition, then this input is accpeted \
 \
 **Code Remark**
-1. Read those 2 methods first, they are the core concept: NFA.Build() & NFA.Recognize(string txt).  Skip *Decorator class* code first.
+1. Read NFA.Build() & NFA.Recognize(string txt) first.  Skip *Decorator class* code in the beginning
 2. Assure that one | must be accomanied by parentheses ()
 3. *Decorator class* is used to add ( ) when necessary, for example, A|B|C => ((A|B)|C)
 4. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA, for example, A{2-4} => (AA|AAA|AAAA)
