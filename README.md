@@ -49,20 +49,20 @@ A{2-4} = (AA|AAA|AAAA)\
 (3) Add alphabet transition for alphabet (solid line)
 (4) Add ε transition for meta charater *, (, ), | (dashed line)
 &nbsp;&nbsp;&nbsp;&nbsp;(4.1) For (, ), * add ε transition to next state
-&nbsp;&nbsp;&nbsp;&nbsp;(4.2) For * not after ()
-&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa2.png)
-&nbsp;&nbsp;&nbsp;&nbsp;(4.3) For * after ()
-&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa3.png)
-&nbsp;&nbsp;&nbsp;&nbsp;(4.4) For | 
-&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa4.png)
+&nbsp;&nbsp;&nbsp;&nbsp;(4.2) For * not after ()\
+&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa2.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.3) For * after ()\
+&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa3.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.4) For | \
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa4.png)\
 
-&nbsp;&nbsp;&nbsp;&nbsp;(4.5) Complete example of RE = AB*
-&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa1.png)
-&nbsp;&nbsp;&nbsp;&nbsp;(4.6) Complete example of RE = (AB)*
-&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa5.png)
-&nbsp;&nbsp;&nbsp;&nbsp;(4.7) Complete example of RE = (A|B)C
-&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa6.png)
-...\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.5) Complete example of RE = AB*\
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa1.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.6) Complete example of RE = (AB)*\
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa5.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.7) Complete example of RE = (A|B)C\
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa6.png)\
+\
 **Transit State**\
 Assume input is "AB", then the transit order is \
 (1) ε transition (2) 'A' alphabet match transition (3) ε transition (4) 'B' alphabet match transition (5) ε transition\
