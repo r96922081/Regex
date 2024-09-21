@@ -1,4 +1,5 @@
 
+
 **A [Regular Expression Engine] that supports:**
 
 **Recognize, if the engine accept that input:**
@@ -56,7 +57,7 @@ A{2-4} = (AA|AAA|AAAA)\
 &nbsp;&nbsp;&nbsp;&nbsp;(4.4) For | \
 &nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa4.png)\
 
-&nbsp;&nbsp;&nbsp;&nbsp;(4.5) Complete example of RE = AB*\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.5) Complete example of RE = AB\*\
 &nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa1.png)\
 &nbsp;&nbsp;&nbsp;&nbsp;(4.6) Complete example of RE = (AB)*\
 &nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa5.png)\
@@ -73,9 +74,21 @@ Example of Re = AB*, input = ABB
 | alphabet match|  B|
 | ε|  B, *, Accept|
 | alphabet match|*|
-| ε|  B, Accept|
-\
+| ε|  B, Accept
+
+
 The last states contain Accept, so it's accepted
+
+Example of Re = (A|B)C, input = AD
+![](https://r96922081.github.io/regex/nfa6.png)
+| transition | States after transition |
+|--|--|
+| ε|  A, B|
+| alphabet match|  C|
+| ε|  B, *, Accept|
+| alphabet match| no any states available|
+
+The last states did not contain Accept, so it's not accepted
 
 **Code Remark**
 - Read NFA.Build() & NFA.Recognize(string txt) first.  Skip *Decorator class* code in the beginning
