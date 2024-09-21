@@ -57,6 +57,6 @@ If there is one state is accepted state after doing above 5 transition, then thi
 3. *Decorator class* is used to add ( ) when necessary, for example, A|B|C => ((A|B)|C)
 4. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA, for example, A{2-4} => (AA|AAA|AAAA)
 5. The code is written for clarity, not optimization
-6. Code did not check RE pattern, it may crash for invalid input\
+6. Code did not check RE pattern, it may crash for invalid Re pattern\
 \
 **Reference: Robert Sedgewick, Kevin Wayne, *Algorithhms*, 4th Edition**
