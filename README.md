@@ -57,4 +57,4 @@ If there is one state is accepted state after doing above 5 transition, then thi
 **Code Remark**
 1.  Assume that one | must be accomanied by parentheses ()
 2. *Decorator class* is used to add ( ) when necessary, for example, A|B|C => ((A|B)|C)
-3. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA
+3. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA, for example, A{2-4} => (AA|AAA|AAAA)
