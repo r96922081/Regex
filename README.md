@@ -1,7 +1,3 @@
-
-
-
-
 **A [Regular Expression Engine] that supports:**
 
 **Recognize, if the engine accept that input:**
@@ -48,6 +44,11 @@ Our NFA needs to support only 4 meta characters: (, ), |, *,  others are short h
 A+ = (A)(A)\*\
 A? = (|A)\
 A{2-4} = (AA|AAA|AAAA)\
-
-
-
+\
+**Build NFA**\
+\
+**Transit State**\
+Assume input is "AB", then the transit order is \
+(1) ε transition (2) 'A' alphabet match transition (3) ε transition (4) 'B' alphabet match transition (5) ε transition
+If states become empty after any transition, then know this input is not accpeted \
+If there is one state is accepted state after doing above 5 transition, then this input is accpeted \
