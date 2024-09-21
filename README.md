@@ -51,7 +51,7 @@ A{2-4} = (AA|AAA|AAAA)\
 **Transit State**\
 Assume input is "AB", then the transit order is \
 (1) ε transition (2) 'A' alphabet match transition (3) ε transition (4) 'B' alphabet match transition (5) ε transition\
-If states become empty after any transition, then know this input is not accpeted \
+If states become empty after any transition, then this input is not accpeted \
 If there is one state is accepted state after doing above 5 transition, then this input is accpeted \
 \
 **Code Remark**
