@@ -44,11 +44,11 @@ A? = (|A)\
 A{2-4} = (AA|AAA|AAAA)\
 \
 **Build NFA**\
-(1) Add state for each char of regular expression
-(2) Add additional start & accept state
-(3) Add alphabet transition for alphabet (solid line)
-(4) Add ε transition for meta charater *, (, ), | (dashed line)
-&nbsp;&nbsp;&nbsp;&nbsp;(4.1) For (, ), * add ε transition to next state
+(1) Add state for each char of regular expression\
+(2) Add additional start & accept state\
+(3) Add alphabet transition for alphabet (solid line)\
+(4) Add ε transition for meta charater *, (, ), | (dashed line)\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.1) For (, ), * add ε transition to next state\
 &nbsp;&nbsp;&nbsp;&nbsp;(4.2) For * not after ()\
 &nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa2.png)\
 &nbsp;&nbsp;&nbsp;&nbsp;(4.3) For * after ()\
