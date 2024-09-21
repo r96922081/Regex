@@ -74,6 +74,7 @@ Example of Re = AB*, input = ABB
 | ε|  B, *, Accept|
 | alphabet match|*|
 | ε|  B, Accept|
+\
 The last states contain Accept, so it's accepted
 
 **Code Remark**
