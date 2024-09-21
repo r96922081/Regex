@@ -28,13 +28,10 @@
     {2-4} occurrence, 2 - 4 times
     ^ begin with
     $ end with
-    [A-Z] list all possible matches, A to Z
-
-
-**Reference: Robert Sedgewick, Kevin Wayne, *Algorithhms*, 4th Edition**
-
+    [A-Z] list all possible matches, A to Z\
+\
 **Key notes**\
-The main idea is to build a NFA (Nondeterministic finite-state automata) and transit state by input.  After reading all input, if one of its state is accepted state, then this NFA recognize this input.\
+The main idea is to build a NFA (Nondeterministic finite-state automata) and transit state by input.  After reading all input, if one of its state is accepted state, then this NFA accept (recognize) input.\
 \
 There are 2 major difference between NFA and DFA (Deterministic finite-state automata)\
 (1) NFA can be at many states at any time, while DFA can be at only one\
@@ -57,4 +54,6 @@ If there is one state is accepted state after doing above 5 transition, then thi
 **Code Remark**
 1.  Assume that one | must be accomanied by parentheses ()
 2. *Decorator class* is used to add ( ) when necessary, for example, A|B|C => ((A|B)|C)
-3. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA, for example, A{2-4} => (AA|AAA|AAAA)
+3. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA, for example, A{2-4} => (AA|AAA|AAAA)\
+\
+**Reference: Robert Sedgewick, Kevin Wayne, *Algorithhms*, 4th Edition**
