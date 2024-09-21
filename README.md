@@ -52,8 +52,9 @@ If states become empty after any transition, then this input is not accpeted \
 If there is one state is accepted state after doing above 5 transition, then this input is accpeted \
 \
 **Code Remark**
-1.  Assume that one | must be accomanied by parentheses ()
-2. *Decorator class* is used to add ( ) when necessary, for example, A|B|C => ((A|B)|C)
-3. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA, for example, A{2-4} => (AA|AAA|AAAA)\
+1. Read those 2 methods first, they are the core concept: NFA.Build() & NFA.Recognize(string txt).  Skip *Decorator class* code first.\
+2. Assure that one | must be accomanied by parentheses ()
+3. *Decorator class* is used to add ( ) when necessary, for example, A|B|C => ((A|B)|C)
+4. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA, for example, A{2-4} => (AA|AAA|AAAA)\
 \
 **Reference: Robert Sedgewick, Kevin Wayne, *Algorithhms*, 4th Edition**
