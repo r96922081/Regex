@@ -14,17 +14,26 @@
 public enum ReType
 {
     Char, // a, Z, (, ...
+    MultipleChars, // [a-zA-Z0-9]
     AllChar, // .
 }
 
 public class Re
 {
     public char c = '\0';
+    public List<char> chars = new List<char>();
+
     public ReType type = ReType.Char;
 
     public Re(char c, ReType type)
     {
         this.c = c;
+        this.type = type;
+    }
+
+    public Re(List<char> chars, ReType type)
+    {
+        this.chars = chars;
         this.type = type;
     }
 }
@@ -42,6 +51,7 @@ public class NFA
     public State acceptedState = null;
     public bool startsWith = false;
     public bool endsWith = false;
+    public List<Re> reList = null;
 
     // case 1: AB
     // case 2: A*
@@ -71,6 +81,7 @@ public class NFA
 
         DecoratedRe decorated = Decorator.Decorate(re);
         List<Re> reList = decorated.reList;
+        nfa.reList = reList;
         nfa.startsWith = decorated.startsWith;
         nfa.endsWith = decorated.endsWith;
 
@@ -179,9 +190,21 @@ public class NFA
             // check alphabet transition
             foreach (State s in availableStates)
             {
-                if (s.re.type == ReType.Char && s.re.c == c)
+                if (s.re.type == ReType.Char)
                 {
-                    nextAvailableStates.Add(s.matchTransition);
+                    if (s.re.c == c)
+                        nextAvailableStates.Add(s.matchTransition);
+                }
+                else if (s.re.type == ReType.MultipleChars)
+                {
+                    foreach (char c2 in s.re.chars)
+                    {
+                        if (c2 == c)
+                        {
+                            nextAvailableStates.Add(s.matchTransition);
+                            break;
+                        }
+                    }
                 }
                 else if (s.re.type == ReType.AllChar)
                 {
@@ -215,9 +238,21 @@ public class NFA
             // check alphabet transition
             foreach (State s in availableStates)
             {
-                if (s.re.type == ReType.Char && s.re.c == c)
+                if (s.re.type == ReType.Char)
                 {
-                    nextAvailableStates.Add(s.matchTransition);
+                    if (s.re.c == c)
+                        nextAvailableStates.Add(s.matchTransition);
+                }
+                else if (s.re.type == ReType.MultipleChars)
+                {
+                    foreach (char c2 in s.re.chars)
+                    {
+                        if (c2 == c)
+                        {
+                            nextAvailableStates.Add(s.matchTransition);
+                            break;
+                        }
+                    }
                 }
                 else if (s.re.type == ReType.AllChar)
                 {

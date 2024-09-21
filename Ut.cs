@@ -58,12 +58,35 @@ public class Ut
         Check(nfa.Recognize("AB") == false);
         Check(nfa.Recognize("ABBBBB") == false);
 
+        nfa = NFA.Build("A{11}");
+        Check(nfa.Recognize("AAAAAAAAAAA") == true);
+
+        nfa = NFA.Build("A{10-20}");
+        Check(nfa.Recognize("AAAAAAAAAA") == true);
+        Check(nfa.Recognize("AAAAAAAAAAAAAAAAAAAAA") == false);
+
         nfa = NFA.Build("((A+)B)+");
         Check(nfa.Recognize("A") == false);
         Check(nfa.Recognize("AB") == true);
         Check(nfa.Recognize("AABAAB") == true);
         Check(nfa.Recognize("ABBC") == false);
 
+        nfa = NFA.Build("[AB]");
+        Check(nfa.Recognize("A") == true);
+        Check(nfa.Recognize("B") == true);
+        Check(nfa.Recognize("AB") == false);
+        Check(nfa.Recognize("C") == false);
+
+        nfa = NFA.Build("[ABCDEFG]+");
+        Check(nfa.Recognize("A") == true);
+        Check(nfa.Recognize("AAAB") == true);
+        Check(nfa.Recognize("Z") == false);
+
+        nfa = NFA.Build("[a-zA-Z0-9-]");
+        Check(nfa.Recognize("A") == true);
+        Check(nfa.Recognize("1") == true);
+        Check(nfa.Recognize("-") == true);
+        Check(nfa.Recognize("@") == false);
 
         // support both \t and \\t to represent tab for working with lexer
         nfa = NFA.Build("A\tB\nC\rD\\E");
@@ -94,8 +117,8 @@ public class Ut
 
     private void UtSplitToken()
     {
-        List<List<Re>> tokens = Decorator.SplitToken(getReList("AB+(C(D)E){1-3}|F"));
-        Check(tokens.Count == 7);
+        List<List<Re>> tokens = Decorator.SplitToken(getReList("AB+(C(D)E){1-3}|F[AB]"));
+        Check(tokens.Count == 8);
         Check(GetReString(tokens[0]) == "A");
         Check(GetReString(tokens[1]) == "B");
         Check(GetReString(tokens[2]) == "+");
@@ -103,6 +126,7 @@ public class Ut
         Check(GetReString(tokens[4]) == "{1-3}");
         Check(GetReString(tokens[5]) == "|");
         Check(GetReString(tokens[6]) == "F");
+        Check(GetReString(tokens[7]) == "[AB]");
     }
 
     private void UtDecoratorOr()

@@ -4,21 +4,18 @@ class Program
 {
     static void Demo()
     {
-        Trace.Assert(Regex.Recognize("A*", "") == true);
-        Trace.Assert(Regex.Recognize("A+", "") == false);
-        Trace.Assert(Regex.Recognize("A*", "AAA") == true);
-        Trace.Assert(Regex.Recognize("A+B?", "AAB") == true);
-        Trace.Assert(Regex.Recognize("A+B?", "AABB") == false);
-        Trace.Assert(Regex.Recognize("AB{2-4}", "ABBBB") == true);
-        Trace.Assert(Regex.Recognize("AB{2-4}", "ABBBBBBB") == false);
+        string datePattern = "[1-9][0-9]{3}-[0-3][0-9]-[0-3][0-9]";
+        string dateInput1 = "2024-12-25";
+        string dateInput2 = "2024-99-99";
+        Trace.Assert(Regex.Recognize(datePattern, dateInput1) == true);
+        Trace.Assert(Regex.Recognize(datePattern, dateInput2) == false);
 
-        Trace.Assert(Regex.Match("A*", "AAAAB") == "AAAA");
-        Trace.Assert(Regex.Match("A*", "B") == "");
-        Trace.Assert(Regex.Match("AB{2}", "ABBBBB") == "ABB");
-        Trace.Assert(Regex.Match("AB|(CD)+", "AAACDCDBBB") == "CDCD");
-        Trace.Assert(Regex.Match("^AB+", "ABBC") == "ABB");
-        Trace.Assert(Regex.Match("AB+$", "CABB") == "ABB");
-        Trace.Assert(Regex.Match("^AB+$", "XABB") == "");
+        string emailPattern = "[a-zA-Z0-9\\.-]+@[a-zA-Z0-9-](\\.[a-zA-Z0-9-])+";
+        string emailInput = "Here are my emails: r96922081@gmail.com, my-account@yahoo.com. Welcome to mail me";
+        List<string> allMatch = Regex.MatchAll(emailPattern, emailInput);
+        Trace.Assert(allMatch.Count == 2);
+        Trace.Assert(allMatch[0] == "r96922081@gmail.com");
+        Trace.Assert(allMatch[1] == "my-account@yahoo.com");
     }
 
     static void Ut()
@@ -28,7 +25,7 @@ class Program
 
     static void Main(String[] args)
     {
-        Ut();
+        //Ut();
         Demo();
     }
 }

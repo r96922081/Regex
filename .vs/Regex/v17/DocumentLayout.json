@@ -3,28 +3,28 @@
   "WorkspaceRootPath": "D:\\Github\\Regex\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|d:\\github\\regex\\nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\ut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:ut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\decorator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:decorator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\todo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:todo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\regex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:regex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\decorator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:decorator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|d:\\github\\regex\\ut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:ut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\regex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:regex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,17 +34,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Ut.cs",
               "DocumentMoniker": "D:\\Github\\Regex\\Ut.cs",
               "RelativeDocumentMoniker": "Ut.cs",
               "ToolTip": "D:\\Github\\Regex\\Ut.cs",
               "RelativeToolTip": "Ut.cs",
-              "ViewState": "AQIAAPMAAAAAAAAAAAAAAAABAAAIAAAA",
+              "ViewState": "AQIAABcAAAAAAAAAAAAnwD0AAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T14:03:36.86Z",
               "IsPinned": true,
@@ -52,65 +52,65 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "NFA.cs",
               "DocumentMoniker": "D:\\Github\\Regex\\NFA.cs",
               "RelativeDocumentMoniker": "NFA.cs",
               "ToolTip": "D:\\Github\\Regex\\NFA.cs",
               "RelativeToolTip": "NFA.cs",
-              "ViewState": "AQIAAFYAAAAAAAAAAAAAAF8AAAAeAAAA",
+              "ViewState": "AQIAABkAAAAAAAAAAAAnwOgAAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-20T12:13:30.626Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Todo.cs",
               "DocumentMoniker": "D:\\Github\\Regex\\Todo.cs",
               "RelativeDocumentMoniker": "Todo.cs",
               "ToolTip": "D:\\Github\\Regex\\Todo.cs",
               "RelativeToolTip": "Todo.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAABFAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-20T13:09:29.509Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Regex.cs",
               "DocumentMoniker": "D:\\Github\\Regex\\Regex.cs",
               "RelativeDocumentMoniker": "Regex.cs",
               "ToolTip": "D:\\Github\\Regex\\Regex.cs",
               "RelativeToolTip": "Regex.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAIAAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABgAAAAlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T14:03:34.203Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "Decorator.cs",
               "DocumentMoniker": "D:\\Github\\Regex\\Decorator.cs",
               "RelativeDocumentMoniker": "Decorator.cs",
               "ToolTip": "D:\\Github\\Regex\\Decorator.cs",
               "RelativeToolTip": "Decorator.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAEAAAA",
+              "ViewState": "AQIAAHUAAAAAAAAAAAAnwIIAAAArAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T14:03:23.232Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Github\\Regex\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "D:\\Github\\Regex\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAA5AAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAA8AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T14:02:48.947Z",
               "EditorCaption": ""

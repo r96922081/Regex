@@ -43,6 +43,40 @@
                 token.Insert(0, new Re('(', ReType.Char));
                 token.Add(new Re(')', ReType.Char));
             }
+            else if (token[0].c == '[')
+            {
+                token = token.GetRange(1, token.Count - 2);
+                List<char> chars = new List<char>();
+
+                for (int j = 0; j < token.Count; j++)
+                {
+                    Re re = token[j];
+
+                    Re nextRe = null;
+                    Re secondNextRe = null;
+
+                    if (j <= token.Count - 3)
+                    {
+                        nextRe = token[j + 1];
+                        secondNextRe = token[j + 2];
+                    }
+
+                    if (nextRe != null && nextRe.c == '-')
+                    {
+                        for (char c = re.c; c <= secondNextRe.c; c++)
+                        {
+                            chars.Add(c);
+                        }
+                        j += 2;
+                    }
+                    else
+                    {
+                        chars.Add(re.c);
+                    }
+                }
+
+                token = new List<Re> { new Re(chars, ReType.MultipleChars) };
+            }
 
             List<Re> nextToken = new List<Re>();
 
@@ -56,10 +90,7 @@
 
             if (nextToken[0].c == '+')
             {
-                // A+ => AA+
-
-                token = DecorateInternal(token);
-
+                // A+ => AA*
                 newReList.AddRange(token);
                 newReList.AddRange(token);
                 newReList.Add(new Re('*', ReType.Char));
@@ -69,7 +100,6 @@
             else if (nextToken[0].c == '?')
             {
                 // A? => (|A)
-                token = DecorateInternal(token);
                 newReList.Add(new Re('(', ReType.Char));
                 newReList.Add(new Re('|', ReType.Char));
                 newReList.AddRange(token);
@@ -79,8 +109,6 @@
             }
             else if (nextToken[0].c == '{')
             {
-                token = DecorateInternal(token);
-
                 nextToken = nextToken.GetRange(1, nextToken.Count - 2);
 
                 int dash = -1;
@@ -96,7 +124,11 @@
 
                 if (dash == -1)
                 {
-                    int count = int.Parse("" + nextToken[0].c);
+                    string s = "";
+                    for (int j = 0; j < nextToken.Count; j++)
+                        s += nextToken[j].c;
+
+                    int count = int.Parse(s);
                     for (int j = 0; j < count; j++)
                     {
                         newReList.AddRange(token);
@@ -207,7 +239,7 @@
         return newReList;
     }
 
-    // AB+(C(D)E){1-3}F => A, B, +, (C(D)E), {1-3}, F
+    // AB+(C(D)E){1-3}F[a-zA-Z] => A, B, +, (C(D)E), {1-3}, F, [a-zA-Z]
     public static List<List<Re>> SplitToken(List<Re> reList)
     {
         List<List<Re>> tokens = new List<List<Re>>();
@@ -245,6 +277,19 @@
                             token.Add(reList[i]);
 
                             if (reList[i].c == '}')
+                                break;
+                            i++;
+                        }
+                        tokens.Add(token);
+                    }
+                    else if (re.c == '[')
+                    {
+                        List<Re> token = new List<Re>();
+                        while (true)
+                        {
+                            token.Add(reList[i]);
+
+                            if (reList[i].c == ']')
                                 break;
                             i++;
                         }
