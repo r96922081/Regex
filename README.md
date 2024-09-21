@@ -32,7 +32,7 @@
     ^ begin with
     $ end with
     [A-Z] list all possible matches, A to Z\
-\
+
 
 ## **Algorithm/Code Explanation**
 
