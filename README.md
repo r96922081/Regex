@@ -64,17 +64,24 @@ A{2-4} = (AA|AAA|AAAA)\
 &nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa6.png)\
 \
 **Transit State**\
-Assume input is "AB", then the transit order is \
-(1) ε transition (2) 'A' alphabet match transition (3) ε transition (4) 'B' alphabet match transition (5) ε transition\
-If states become empty after any transition, then this input is not accpeted \
-If there is one state is accepted state after doing above 5 transition, then this input is accpeted \
-\
+Do transition ε and alphabet match in alternative sequence\
+Example of Re = AB*, input = ABB
+![](https://r96922081.github.io/regex/nfa1.png)
+| transition | States after transition |
+|--|--|
+| ε|  A|
+| alphabet match|  B|
+| ε|  B, *, Accept|
+| alphabet match|*|
+| ε|  B, Accept|
+The last states contain Accept, so it's accepted
+
 **Code Remark**
-1. Read NFA.Build() & NFA.Recognize(string txt) first.  Skip *Decorator class* code in the beginning
-2. Assure that one | must be accomanied by parentheses ()
-3. *Decorator class* is used to add ( ) when necessary, for example, A|B|C => ((A|B)|C)
-4. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA, for example, A{2-4} => (AA|AAA|AAAA)
-5. The code is written for clarity, it was not optimized
-6. Code did not check RE pattern, it may crash for invalid Re pattern\
-\
+- Read NFA.Build() & NFA.Recognize(string txt) first.  Skip *Decorator class* code in the beginning
+- Assure that one | must be accomanied by parentheses ()
+- *Decorator class* is used to add ( ) when necessary, for example, A|B|C => ((A|B)|C)
+-  *Decorator class* is also in charge of modifying regular expression before feeding it into NFA, for example, A{2-4} => (AA|AAA|AAAA)
+- The code is written for clarity, it was not optimized
+- Code did not check RE pattern, it may crash for invalid Re pattern
+
 **Reference: Robert Sedgewick, Kevin Wayne, *Algorithhms*, 4th Edition**
