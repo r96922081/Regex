@@ -8,7 +8,6 @@ public class Ut
             Trace.Assert(false);
     }
 
-    // 
     public void RunAllUt()
     {
         UtNfa();
@@ -73,58 +72,80 @@ public class Ut
         Check(nfa.Recognize("A\tB\nC\rD\\E") == true);
     }
 
+    private string GetReString(List<Re> re)
+    {
+        string s = "";
+        foreach (Re r in re)
+        {
+            s += r.c;
+        }
+        return s;
+    }
+
+    private List<Re> getReList(string re)
+    {
+        List<Re> list = new List<Re>();
+        foreach (char c in re)
+        {
+            list.Add(new Re(c, ReType.Char));
+        }
+        return list;
+    }
+
     private void UtSplitToken()
     {
-        List<string> tokens = Decorator.SplitToken("AB+(C(D)E){1-3}|F");
+        List<List<Re>> tokens = Decorator.SplitToken(getReList("AB+(C(D)E){1-3}|F"));
         Check(tokens.Count == 7);
-        Check(tokens[0] == "A");
-        Check(tokens[1] == "B");
-        Check(tokens[2] == "+");
-        Check(tokens[3] == "(C(D)E)");
-        Check(tokens[4] == "{1-3}");
-        Check(tokens[5] == "|");
-        Check(tokens[6] == "F");
+        Check(GetReString(tokens[0]) == "A");
+        Check(GetReString(tokens[1]) == "B");
+        Check(GetReString(tokens[2]) == "+");
+        Check(GetReString(tokens[3]) == "(C(D)E)");
+        Check(GetReString(tokens[4]) == "{1-3}");
+        Check(GetReString(tokens[5]) == "|");
+        Check(GetReString(tokens[6]) == "F");
     }
 
     private void UtDecoratorOr()
     {
-        Check(Decorator.DecorateOr("A") == "A");
-        Check(Decorator.DecorateOr("AB") == "AB");
-        Check(Decorator.DecorateOr("(A)") == "(A)");
-        Check(Decorator.DecorateOr("A|B") == "(A|B)");
-        Check(Decorator.DecorateOr("A|B|C") == "((A|B)|C)");
-        Check(Decorator.DecorateOr("((A|BB)|CCC)") == "((A|BB)|CCC)");
-        Check(Decorator.DecorateOr("A|(BC)|D") == "((A|(BC))|D)");
-        Check(Decorator.DecorateOr("A|(B|C)") == "(A|(B|C))");
+        Check(GetReString(Decorator.DecorateOr(getReList("A"))) == "A");
+        Check(GetReString(Decorator.DecorateOr(getReList("AB"))) == "AB");
+        Check(GetReString(Decorator.DecorateOr(getReList("(A)"))) == "(A)");
+        Check(GetReString(Decorator.DecorateOr(getReList("A|B"))) == "(A|B)");
+        Check(GetReString(Decorator.DecorateOr(getReList("A|B|C"))) == "((A|B)|C)");
+        Check(GetReString(Decorator.DecorateOr(getReList("((A|BB)|CCC)"))) == "((A|BB)|CCC)");
+        Check(GetReString(Decorator.DecorateOr(getReList("A|(BC)|D"))) == "((A|(BC))|D)");
+        Check(GetReString(Decorator.DecorateOr(getReList("A|(B|C)"))) == "(A|(B|C))");
     }
+
 
     private void UtDecorateInternal()
     {
-        Check(Decorator.Decorate("A") == "A");
-        Check(Decorator.Decorate("ABC") == "ABC");
-        Check(Decorator.Decorate("A|B") == "(A|B)");
+        Check(GetReString(Decorator.DecorateInternal(getReList("A"))) == "A");
+        Check(GetReString(Decorator.DecorateInternal(getReList("ABC"))) == "ABC");
+        Check(GetReString(Decorator.DecorateInternal(getReList("A|B"))) == "(A|B)");
 
-        Check(Decorator.Decorate("A+") == "AA*");
-        Check(Decorator.Decorate("A?") == "(|A)");
-        Check(Decorator.Decorate("A{3}") == "AAA");
-        Check(Decorator.Decorate("A{2-4}") == "((AA|AAA)|AAAA)");
+        Check(GetReString(Decorator.DecorateInternal(getReList("A+"))) == "AA*");
+        Check(GetReString(Decorator.DecorateInternal(getReList("A?"))) == "(|A)");
+        Check(GetReString(Decorator.DecorateInternal(getReList("A{3}"))) == "AAA");
+        Check(GetReString(Decorator.DecorateInternal(getReList("A{2-4}"))) == "((AA|AAA)|AAAA)");
 
-        Check(Decorator.Decorate("BA+") == "BAA*");
-        Check(Decorator.Decorate("BA?") == "B(|A)");
-        Check(Decorator.Decorate("BA{3}") == "BAAA");
-        Check(Decorator.Decorate("BA{2-4}") == "B((AA|AAA)|AAAA)");
+        Check(GetReString(Decorator.DecorateInternal(getReList("BA+"))) == "BAA*");
+        Check(GetReString(Decorator.DecorateInternal(getReList("BA?"))) == "B(|A)");
+        Check(GetReString(Decorator.DecorateInternal(getReList("BA{3}"))) == "BAAA");
+        Check(GetReString(Decorator.DecorateInternal(getReList("BA{2-4}"))) == "B((AA|AAA)|AAAA)");
 
-        Check(Decorator.Decorate("B(CD)+") == "B(CD)(CD)*");
-        Check(Decorator.Decorate("B(CD)?") == "B(|(CD))");
-        Check(Decorator.Decorate("B(CD){3}") == "B(CD)(CD)(CD)");
-        Check(Decorator.Decorate("B(CD){2-4}") == "B(((CD)(CD)|(CD)(CD)(CD))|(CD)(CD)(CD)(CD))");
+        Check(GetReString(Decorator.DecorateInternal(getReList("B(CD)+"))) == "B(CD)(CD)*");
+        Check(GetReString(Decorator.DecorateInternal(getReList("B(CD)?"))) == "B(|(CD))");
+        Check(GetReString(Decorator.DecorateInternal(getReList("B(CD){3}"))) == "B(CD)(CD)(CD)");
+        Check(GetReString(Decorator.DecorateInternal(getReList("B(CD){2-4}"))) == "B(((CD)(CD)|(CD)(CD)(CD))|(CD)(CD)(CD)(CD))");
 
-        Check(Decorator.Decorate("B|A+") == "(B|AA*)");
-        Check(Decorator.Decorate("B|A?") == "(B|(|A))");
-        Check(Decorator.Decorate("B|A{3}") == "(B|AAA)");
-        Check(Decorator.Decorate("B|A{2-4}") == "(B|((AA|AAA)|AAAA))");
+        Check(GetReString(Decorator.DecorateInternal(getReList("B|A+"))) == "(B|AA*)");
+        Check(GetReString(Decorator.DecorateInternal(getReList("B|A?"))) == "(B|(|A))");
+        Check(GetReString(Decorator.DecorateInternal(getReList("B|A{3}"))) == "(B|AAA)");
+        Check(GetReString(Decorator.DecorateInternal(getReList("B|A{2-4}"))) == "(B|((AA|AAA)|AAAA))");
 
-        Check(Decorator.Decorate("((A+)B)+))") == "((AA*)B)((AA*)B)*");
+        string xxx = GetReString(Decorator.DecorateInternal(getReList("((A+)B)+))")));
+        Check(GetReString(Decorator.DecorateInternal(getReList("((A+)B)+))"))) == "((AA*)B)((AA*)B)*");
     }
 
     private void UtDecorate()
@@ -229,5 +250,18 @@ public class Ut
         Check(nfa.Recognize("BA") == true);
         Check(nfa.Recognize("B") == false);
         Check(nfa.Recognize("BAA") == false);
+
+        re = "\\.";
+        nfa = NFA.Build(re);
+        Check(nfa.Recognize(".") == true);
+        Check(nfa.Recognize("A") == false);
+        Check(nfa.Recognize("") == false);
+
+        re = "\\.A";
+        nfa = NFA.Build(re);
+        Check(nfa.Recognize(".A") == true);
+        Check(nfa.Recognize(".") == false);
+        Check(nfa.Recognize("..") == false);
+        Check(nfa.Recognize("AA") == false);
     }
 }

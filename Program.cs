@@ -28,6 +28,7 @@ class Program
 
     static void Main(String[] args)
     {
+        Ut();
         Demo();
     }
 }

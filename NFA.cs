@@ -1,22 +1,47 @@
 ﻿public class State
 {
-    public char c = ' ';
+    public Re re = null;
     public int index = -1;
     public List<State> epislonTransition = new List<State>();
     public State matchTransition = null;
 
-    public State(char c)
+    public State(Re re)
+    {
+        this.re = re;
+    }
+}
+
+public enum ReType
+{
+    Char, // a, Z, (, ...
+    AllChar, // .
+}
+
+public class Re
+{
+    public char c = '\0';
+    public ReType type = ReType.Char;
+
+    public Re(char c, ReType type)
     {
         this.c = c;
+        this.type = type;
     }
+}
+
+public class DecoratedRe
+{
+    public List<Re> reList = new List<Re>();
+    public bool startsWith = false;
+    public bool endsWith = false;
 }
 
 public class NFA
 {
     public State startState = null;
     public State acceptedState = null;
-    public bool beginWith = false;
-    public bool endWith = false;
+    public bool startsWith = false;
+    public bool endsWith = false;
 
     // case 1: AB
     // case 2: A*
@@ -44,29 +69,19 @@ public class NFA
     {
         NFA nfa = new NFA();
 
-        if (re.Length > 0 && re[0] == '^')
-        {
-            nfa.beginWith = true;
-            re = re.Substring(1);
-        }
-
-        if (re.Length > 0 && re[re.Length - 1] == '$')
-        {
-            nfa.endWith = true;
-            re = re.Substring(0, re.Length - 1);
-        }
-
-        re = Decorator.Decorate(re);
+        DecoratedRe decorated = Decorator.Decorate(re);
+        List<Re> reList = decorated.reList;
+        nfa.startsWith = decorated.startsWith;
+        nfa.endsWith = decorated.endsWith;
 
         List<State> states = new List<State>();
-        for (int i = 0; i < re.Length; i++)
+        for (int i = 0; i < reList.Count; i++)
         {
-            char c = re[i];
-            State s = new State(re[i]);
+            State s = new State(reList[i]);
             s.index = i;
             states.Add(s);
         }
-        State acceptState = new State('\0');
+        State acceptState = new State(new Re('\0', ReType.Char));
         states.Add(acceptState);
         nfa.acceptedState = acceptState;
 
@@ -74,10 +89,10 @@ public class NFA
 
         Stack<State> operatorStack = new Stack<State>();
 
-        for (int i = 0; i < re.Length; i++)
+        for (int i = 0; i < reList.Count; i++)
         {
             State s = states[i];
-            char c = s.c;
+            char c = s.re.c;
             if (IsAlphabet(c))
                 s.matchTransition = states[i + 1];
             else if (c == '(' || c == ')' || c == '*')
@@ -93,21 +108,21 @@ public class NFA
 
                 State nextState = states[i + 1];
 
-                if (op.c == '|')
+                if (op.re.c == '|')
                 {
                     State op2 = operatorStack.Pop();
                     op2.epislonTransition.Add(states[op.index + 1]);
                     op.epislonTransition.Add(s);
 
-                    if (nextState.c == '*')
+                    if (nextState.re.c == '*')
                     {
                         nextState.epislonTransition.Add(op2);
                         op2.epislonTransition.Add(nextState);
                     }
                 }
-                else if (op.c == '(')
+                else if (op.re.c == '(')
                 {
-                    if (nextState.c == '*')
+                    if (nextState.re.c == '*')
                     {
                         nextState.epislonTransition.Add(op);
                         op.epislonTransition.Add(nextState);
@@ -117,7 +132,7 @@ public class NFA
             else if (IsAlphabet(c) || c == '*')
             {
                 State nextState = states[i + 1];
-                if (nextState.c == '*')
+                if (nextState.re.c == '*')
                 {
                     s.epislonTransition.Add(nextState);
                     nextState.epislonTransition.Add(s);
@@ -138,9 +153,9 @@ public class NFA
             // found match
             if (matchString != "")
             {
-                if (beginWith == true && i != 0)
+                if (startsWith == true && i != 0)
                     continue;
-                if (endWith == true && i + matchString.Length != txt.Length)
+                if (endsWith == true && i + matchString.Length != txt.Length)
                     continue;
                 return matchString;
             }
@@ -164,7 +179,11 @@ public class NFA
             // check alphabet transition
             foreach (State s in availableStates)
             {
-                if (s.c == c || s.c == '.')
+                if (s.re.type == ReType.Char && s.re.c == c)
+                {
+                    nextAvailableStates.Add(s.matchTransition);
+                }
+                else if (s.re.type == ReType.AllChar)
                 {
                     nextAvailableStates.Add(s.matchTransition);
                 }
@@ -191,13 +210,16 @@ public class NFA
         availableStates = DoEpsilonTransition(availableStates);
         foreach (char c in txt)
         {
-
             List<State> nextAvailableStates = new List<State>();
 
             // check alphabet transition
             foreach (State s in availableStates)
             {
-                if (s.c == c || s.c == '.')
+                if (s.re.type == ReType.Char && s.re.c == c)
+                {
+                    nextAvailableStates.Add(s.matchTransition);
+                }
+                else if (s.re.type == ReType.AllChar)
                 {
                     nextAvailableStates.Add(s.matchTransition);
                 }
