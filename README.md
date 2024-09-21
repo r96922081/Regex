@@ -1,6 +1,7 @@
 
 
-**A [Regular Expression Engine] that supports:**
+
+## **A [Regular Expression Engine] That Supports:**
 
 **Recognize, if the engine accept that input:**
 
@@ -32,7 +33,9 @@
     $ end with
     [A-Z] list all possible matches, A to Z\
 \
-**Key notes**\
+
+## **Algorithm/Code Explanation**
+
 The main idea is to build a NFA (Nondeterministic finite-state automata) and transit state by input.  After reading all input, if one of its state is accepted state, then this NFA accept (recognize) input.\
 \
 There are 2 major difference between NFA and DFA (Deterministic finite-state automata)\
@@ -45,38 +48,39 @@ A? = (|A)\
 A{2-4} = (AA|AAA|AAAA)\
 \
 **Build NFA**\
-(1) Add state for each char of regular expression\
-(2) Add additional start & accept state\
-(3) Add alphabet transition for alphabet (solid line)\
-(4) Add ε transition for meta charater *, (, ), | (dashed line)\
-&nbsp;&nbsp;&nbsp;&nbsp;(4.1) For (, ), * add ε transition to next state\
-&nbsp;&nbsp;&nbsp;&nbsp;(4.2) For * not after ()\
-&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa2.png)\
-&nbsp;&nbsp;&nbsp;&nbsp;(4.3) For * after ()\
-&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa3.png)\
-&nbsp;&nbsp;&nbsp;&nbsp;(4.4) For | \
+\
+(1) Add state for each char of regular expression, and additional start & accept state\
+(2) Add alphabet transition for each alphabet (solid line)\
+(3) Add ε transition for meta charater *, (, ), | (dashed line)\
+&nbsp;&nbsp;&nbsp;&nbsp;(3.1) For (, ), * add ε transition to next state\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3.1.2) For \* not after (), add additional ε transition: \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa2.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3.1.2) For \* after (), add additional ε transition: \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa3.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;(3.2) For | , add ε transition: \
 &nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa4.png)\
-
-&nbsp;&nbsp;&nbsp;&nbsp;(4.5) Complete example of RE = AB\*\
+(4) Complete examples\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.1) Complete example of RE = AB\*\
 &nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa1.png)\
-&nbsp;&nbsp;&nbsp;&nbsp;(4.6) Complete example of RE = (AB)*\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.2) Complete example of RE = (AB)\*\
 &nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa5.png)\
-&nbsp;&nbsp;&nbsp;&nbsp;(4.7) Complete example of RE = (A|B)C\
+&nbsp;&nbsp;&nbsp;&nbsp;(4.3) Complete example of RE = (A|B)C\
 &nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa6.png)\
 \
 **Transit State**\
+\
 Do transition ε and alphabet match in alternative sequence\
-Example of Re = AB*, input = ABB
+Example of Re = AB\*, input = ABB
 ![](https://r96922081.github.io/regex/nfa1.png)
 | transition | States after transition |
 |--|--|
 | ε|  A|
 | A: alphabet match|  B|
-| ε|  B, *, Accept|
-| B: alphabet match|*|
-| ε|  B, *, Accept|
-| B: alphabet match|*|
-| ε|  B, *, Accept|
+| ε|  B, \*, Accept|
+| B: alphabet match|\*|
+| ε|  B, \*, Accept|
+| B: alphabet match|\*|
+| ε|  B, \*, Accept|
 
 
 
