@@ -3,7 +3,7 @@
   "WorkspaceRootPath": "D:\\Github\\Regex\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|d:\\github\\regex\\nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:nfa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -11,7 +11,7 @@
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:decorator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|d:\\github\\regex\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|D:\\Github\\Regex\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7E807E9C-306F-401F-9A31-BD6BC6DC1192}|Regex.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -57,7 +57,7 @@
               "RelativeDocumentMoniker": "NFA.cs",
               "ToolTip": "D:\\Github\\Regex\\NFA.cs",
               "RelativeToolTip": "NFA.cs",
-              "ViewState": "AQIAABsBAAAAAAAAAAAnwEcAAAAAAAAA",
+              "ViewState": "AQIAAM0AAAAAAAAAAAAnwFgAAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-20T12:13:30.626Z",
               "EditorCaption": ""
@@ -96,8 +96,7 @@
               "RelativeToolTip": "Decorator.cs",
               "ViewState": "AQIAAGAAAAAAAAAAAAAAAAAAAAAHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-19T14:03:23.232Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-19T14:03:23.232Z"
             },
             {
               "$type": "Document",
@@ -109,8 +108,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-19T14:02:48.947Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-19T14:02:48.947Z"
             }
           ]
         }
