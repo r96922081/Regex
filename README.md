@@ -1,3 +1,7 @@
+
+
+
+
 **A [Regular Expression Engine] that supports:**
 
 **Recognize, if the engine accept that input:**
@@ -49,6 +53,11 @@ A{2-4} = (AA|AAA|AAAA)\
 \
 **Transit State**\
 Assume input is "AB", then the transit order is \
-(1) ε transition (2) 'A' alphabet match transition (3) ε transition (4) 'B' alphabet match transition (5) ε transition
+(1) ε transition (2) 'A' alphabet match transition (3) ε transition (4) 'B' alphabet match transition (5) ε transition\
 If states become empty after any transition, then know this input is not accpeted \
 If there is one state is accepted state after doing above 5 transition, then this input is accpeted \
+\
+** Code Remark **\
+1. Assume that one | must be accomanied by parentheses ()
+2. *Decorator class* is used to add ( ) when necessary, for example, A|B|C => ((A|B)|C)\
+3. *Decorator class* is also in charge of modifying regular expression before feeding it into NFA\
