@@ -31,7 +31,7 @@
     {2-4} occurrence, 2 - 4 times
     ^ begin with
     $ end with
-    [] list all possible matches
+    [A-Z] list all possible matches, A to Z
 
 
 **Reference: Robert Sedgewick, Kevin Wayne, *Algorithhms*, 4th Edition**
