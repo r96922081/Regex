@@ -36,5 +36,9 @@
 
 **Reference: Robert Sedgewick, Kevin Wayne, *Algorithhms*, 4th Edition**
 
-**Key notes**
-The main idea is to build a NFA (Nondeterministic finite-state automata) and transit state by input.  After reading all input, if one of its state is accepted state, then this NFA recognize this input.\
+**Key notes**\
+The main idea is to build a NFA (Nondeterministic finite-state automata) and transit state by input.  After reading all input, if one of its state is accepted state, then this NFA recognize this input.
+\
+There are 2 major difference between NFA and DFA (Deterministic finite-state automata)\
+(1) NFA can be at many states at any time, while DFA can be at only one
+(2) NFA can transit from one state to another even if there is no input (ε transition), while DFA must read one input to transit
