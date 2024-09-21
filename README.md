@@ -71,10 +71,13 @@ Example of Re = AB*, input = ABB
 | transition | States after transition |
 |--|--|
 | ε|  A|
-| alphabet match|  B|
+| A: alphabet match|  B|
 | ε|  B, *, Accept|
-| alphabet match|*|
-| ε|  B, Accept
+| B: alphabet match|*|
+| ε|  B, *, Accept|
+| B: alphabet match|*|
+| ε|  B, *, Accept|
+
 
 
 The last states contain Accept, so it's accepted
@@ -84,9 +87,9 @@ Example of Re = (A|B)C, input = AD
 | transition | States after transition |
 |--|--|
 | ε|  A, B|
-| alphabet match|  C|
-| ε|  B, *, Accept|
-| alphabet match| no any states available|
+| A: alphabet match|  \||
+| ε|  C|
+| D: alphabet match| no any states available|
 
 The last states did not contain Accept, so it's not accepted
 
