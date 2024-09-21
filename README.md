@@ -54,24 +54,24 @@ A{2-4} = (AA|AAA|AAAA)\
 (3) Add ε transition for meta charater *, (, ), | (dashed line)\
 &nbsp;&nbsp;&nbsp;&nbsp;(3.1) For (, ), * add ε transition to next state\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3.1.2) For \* not after (), add additional ε transition: \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa2.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/images/regex/nfa2.png)\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3.1.2) For \* after (), add additional ε transition: \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/regex/nfa3.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![](https://r96922081.github.io/images/regex/nfa3.png)\
 &nbsp;&nbsp;&nbsp;&nbsp;(3.2) For | , add ε transition: \
-&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa4.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/images/regex/nfa4.png)\
 (4) Complete examples\
 &nbsp;&nbsp;&nbsp;&nbsp;(4.1) Complete example of RE = AB\*\
-&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa1.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/images/regex/nfa1.png)\
 &nbsp;&nbsp;&nbsp;&nbsp;(4.2) Complete example of RE = (AB)\*\
-&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa5.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/images/regex/nfa5.png)\
 &nbsp;&nbsp;&nbsp;&nbsp;(4.3) Complete example of RE = (A|B)C\
-&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/regex/nfa6.png)\
+&nbsp;&nbsp;&nbsp;&nbsp;![](https://r96922081.github.io/images/regex/nfa6.png)\
 \
 **Transit State**\
 \
 Do transition ε and alphabet match in alternative sequence\
 Example of Re = AB\*, input = ABB
-![](https://r96922081.github.io/regex/nfa1.png)
+![](https://r96922081.github.io/images/regex/nfa1.png)
 | transition | States after transition |
 |--|--|
 | ε|  A|
@@ -87,7 +87,7 @@ Example of Re = AB\*, input = ABB
 The last states contain Accept, so it's accepted
 
 Example of Re = (A|B)C, input = AD
-![](https://r96922081.github.io/regex/nfa6.png)
+![](https://r96922081.github.io/images/regex/nfa6.png)
 | transition | States after transition |
 |--|--|
 | ε|  A, B|
