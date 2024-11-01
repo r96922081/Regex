@@ -193,49 +193,18 @@ public class NFA
 
     public string MatchInternal(string txt)
     {
-        List<State> availableStates = new List<State>();
-        availableStates.Add(startState);
-        availableStates = DoEpsilonTransition(availableStates);
+        Tuple<RecognizeParam, RecognizeResult> ret = InitRecognize();
+        RecognizeParam param = ret.Item1;
+        RecognizeResult result = ret.Item2;
 
         int lastMatch = -1;
         for (int i = 0; i < txt.Length; i++)
         {
-            char c = txt[i];
-            List<State> nextAvailableStates = new List<State>();
-
-            // check alphabet transition
-            foreach (State s in availableStates)
-            {
-                if (s.re.type == ReType.Char)
-                {
-                    if (s.re.c == c)
-                        nextAvailableStates.Add(s.matchTransition);
-                }
-                else if (s.re.type == ReType.MultipleChars)
-                {
-                    foreach (char c2 in s.re.chars)
-                    {
-                        if (c2 == c)
-                        {
-                            nextAvailableStates.Add(s.matchTransition);
-                            break;
-                        }
-                    }
-                }
-                else if (s.re.type == ReType.AllChar)
-                {
-                    nextAvailableStates.Add(s.matchTransition);
-                }
-            }
-
-            if (nextAvailableStates.Count == 0)
-                return txt.Substring(0, lastMatch + 1);
-
-            availableStates = nextAvailableStates;
-            availableStates = DoEpsilonTransition(availableStates);
-
-            if (availableStates.Contains(acceptedState))
+            result = StepRecognize(txt[i], param);
+            if (result == RecognizeResult.AliveAndAccept)
                 lastMatch = i;
+            else if (result == RecognizeResult.EndAndReject)
+                break;
         }
 
         return txt.Substring(0, lastMatch + 1);
@@ -250,7 +219,6 @@ public class NFA
     {
         List<State> availableStates = DoEpsilonTransition(param.availableStates);
         List<State> nextAvailableStates = new List<State>();
-
 
         foreach (State s in availableStates)
         {
@@ -288,7 +256,7 @@ public class NFA
             return RecognizeResult.AliveButNotAccept;
     }
 
-    public bool Recognize(string txt)
+    private Tuple<RecognizeParam, RecognizeResult> InitRecognize()
     {
         List<State> availableStates = new List<State>();
         availableStates.Add(startState);
@@ -298,7 +266,14 @@ public class NFA
         if (availableStates.Contains(acceptedState))
             result = RecognizeResult.AliveAndAccept;
 
-        RecognizeParam param = new RecognizeParam(availableStates);
+        return new Tuple<RecognizeParam, RecognizeResult>(new RecognizeParam(availableStates), result);
+    }
+
+    public bool Recognize(string txt)
+    {
+        Tuple<RecognizeParam, RecognizeResult> ret = InitRecognize();
+        RecognizeParam param = ret.Item1;
+        RecognizeResult result = ret.Item2;
 
         foreach (char c in txt)
         {
