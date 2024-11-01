@@ -25,7 +25,7 @@ class Program
 
     static void Main(String[] args)
     {
-        //Ut();
+        Ut();
         Demo();
     }
 }

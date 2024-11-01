@@ -10,7 +10,8 @@ public class Ut
 
     public void RunAllUt()
     {
-        UtNfa();
+        UtStepRecognize();
+        UtRecognize();
         UtDecorate();
         UtNfaWithDecorator();
         UtMatch();
@@ -179,7 +180,26 @@ public class Ut
         UtDecorateInternal();
     }
 
-    private void UtNfa()
+    private void UtStepRecognize()
+    {
+        string re = "A*";
+        NFA nfa = NFA.Build(re);
+        RecognizeParam param = nfa.CreateRecognizeParam();
+        Check(nfa.StepRecognize('A', param) == RecognizeResult.AliveAndAccept);
+        Check(nfa.StepRecognize('A', param) == RecognizeResult.AliveAndAccept);
+        Check(nfa.StepRecognize('A', param) == RecognizeResult.AliveAndAccept);
+        Check(nfa.StepRecognize('B', param) == RecognizeResult.EndAndReject);
+
+        re = "AB";
+        nfa = NFA.Build(re);
+        param = nfa.CreateRecognizeParam();
+        Check(nfa.StepRecognize('A', param) == RecognizeResult.AliveButNotAccept);
+        Check(nfa.StepRecognize('B', param) == RecognizeResult.AliveAndAccept);
+        Check(nfa.StepRecognize('C', param) == RecognizeResult.EndAndReject);
+
+    }
+
+    private void UtRecognize()
     {
         string re = "AB";
         NFA nfa = NFA.Build(re);

@@ -45,6 +45,22 @@ public class DecoratedRe
     public bool endsWith = false;
 }
 
+public enum RecognizeResult
+{
+    AliveAndAccept,
+    AliveButNotAccept,
+    EndAndReject
+}
+
+public class RecognizeParam
+{
+    public List<State> availableStates;
+    public RecognizeParam(List<State> availableStates)
+    {
+        this.availableStates = availableStates;
+    }
+}
+
 public class NFA
 {
     public State startState = null;
@@ -225,46 +241,73 @@ public class NFA
         return txt.Substring(0, lastMatch + 1);
     }
 
+    public RecognizeParam CreateRecognizeParam()
+    {
+        return new RecognizeParam(new List<State>() { startState });
+    }
+
+    public RecognizeResult StepRecognize(char c, RecognizeParam param)
+    {
+        List<State> availableStates = DoEpsilonTransition(param.availableStates);
+        List<State> nextAvailableStates = new List<State>();
+
+
+        foreach (State s in availableStates)
+        {
+            if (s.re.type == ReType.Char)
+            {
+                if (s.re.c == c)
+                    nextAvailableStates.Add(s.matchTransition);
+            }
+            else if (s.re.type == ReType.MultipleChars)
+            {
+                foreach (char c2 in s.re.chars)
+                {
+                    if (c2 == c)
+                    {
+                        nextAvailableStates.Add(s.matchTransition);
+                        break;
+                    }
+                }
+            }
+            else if (s.re.type == ReType.AllChar)
+            {
+                nextAvailableStates.Add(s.matchTransition);
+            }
+        }
+
+
+        param.availableStates.Clear();
+        param.availableStates.AddRange(DoEpsilonTransition(nextAvailableStates));
+
+        if (param.availableStates.Count == 0)
+            return RecognizeResult.EndAndReject;
+        else if (param.availableStates.Contains(acceptedState))
+            return RecognizeResult.AliveAndAccept;
+        else
+            return RecognizeResult.AliveButNotAccept;
+    }
+
     public bool Recognize(string txt)
     {
         List<State> availableStates = new List<State>();
         availableStates.Add(startState);
 
+        RecognizeResult result = RecognizeResult.AliveButNotAccept;
         availableStates = DoEpsilonTransition(availableStates);
+        if (availableStates.Contains(acceptedState))
+            result = RecognizeResult.AliveAndAccept;
+
+        RecognizeParam param = new RecognizeParam(availableStates);
+
         foreach (char c in txt)
         {
-            List<State> nextAvailableStates = new List<State>();
-
-            // check alphabet transition
-            foreach (State s in availableStates)
-            {
-                if (s.re.type == ReType.Char)
-                {
-                    if (s.re.c == c)
-                        nextAvailableStates.Add(s.matchTransition);
-                }
-                else if (s.re.type == ReType.MultipleChars)
-                {
-                    foreach (char c2 in s.re.chars)
-                    {
-                        if (c2 == c)
-                        {
-                            nextAvailableStates.Add(s.matchTransition);
-                            break;
-                        }
-                    }
-                }
-                else if (s.re.type == ReType.AllChar)
-                {
-                    nextAvailableStates.Add(s.matchTransition);
-                }
-            }
-
-            availableStates = nextAvailableStates;
-            availableStates = DoEpsilonTransition(availableStates);
+            result = StepRecognize(c, param);
+            if (result == RecognizeResult.EndAndReject)
+                break;
         }
 
-        return availableStates.Contains(acceptedState);
+        return result == RecognizeResult.AliveAndAccept;
     }
 
     private void DFS(State s, HashSet<int> visited, List<State> newStates)
