@@ -16,6 +16,18 @@ public enum ReType
     Char, // a, Z, (, ...
     MultipleChars, // [a-zA-Z0-9]
     AllChar, // .
+    Or, // |
+    Plus, // +
+    Minus, // -
+    Star, // *
+    Question, // ?
+    LeftParentBracket, // (
+    RightParentBracket, // )
+    LeftBucketBracket, // [
+    RightBucketBracket, // ]
+    LeftCurlyBracket, // {
+    RightCurlyBracket, // }
+    None
 }
 
 public class Re

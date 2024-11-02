@@ -4,7 +4,7 @@ class Program
 {
     static void Demo()
     {
-        string datePattern = "[1-9][0-9]{3}-[0-3][0-9]-[0-3][0-9]";
+        string datePattern = "[1-9][0-9]{3}\\-[0-3][0-9]\\-[0-3][0-9]";
         string dateInput1 = "2024-12-25";
         string dateInput2 = "2024-99-99";
         Trace.Assert(Regex.Recognize(datePattern, dateInput1) == true);

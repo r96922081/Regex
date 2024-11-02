@@ -10,6 +10,7 @@ public class Ut
 
     public void RunAllUt()
     {
+        UtEscape();
         UtStepRecognize();
         UtRecognize();
         UtDecorate();
@@ -89,10 +90,7 @@ public class Ut
         Check(nfa.Recognize("-") == true);
         Check(nfa.Recognize("@") == false);
 
-        // support both \t and \\t to represent tab for working with lexer
-        nfa = NFA.Build("A\tB\nC\rD\\E");
-        Check(nfa.Recognize("A\tB\nC\rD\\E") == true);
-        nfa = NFA.Build("A\\tB\\nC\\rD\\\\E");
+        nfa = NFA.Build("A\tB\nC\rD\\\\E");
         Check(nfa.Recognize("A\tB\nC\rD\\E") == true);
     }
 
@@ -118,7 +116,7 @@ public class Ut
 
     private void UtSplitToken()
     {
-        List<List<Re>> tokens = Decorator.SplitToken(getReList("AB+(C(D)E){1-3}|F[AB]"));
+        List<List<Re>> tokens = Decorator.SplitToken(Decorator.HandleEscape(getReList("AB+(C(D)E){1-3}|F[AB]")));
         Check(tokens.Count == 8);
         Check(GetReString(tokens[0]) == "A");
         Check(GetReString(tokens[1]) == "B");
@@ -132,14 +130,14 @@ public class Ut
 
     private void UtDecoratorOr()
     {
-        Check(GetReString(Decorator.DecorateOr(getReList("A"))) == "A");
-        Check(GetReString(Decorator.DecorateOr(getReList("AB"))) == "AB");
-        Check(GetReString(Decorator.DecorateOr(getReList("(A)"))) == "(A)");
-        Check(GetReString(Decorator.DecorateOr(getReList("A|B"))) == "(A|B)");
-        Check(GetReString(Decorator.DecorateOr(getReList("A|B|C"))) == "((A|B)|C)");
-        Check(GetReString(Decorator.DecorateOr(getReList("((A|BB)|CCC)"))) == "((A|BB)|CCC)");
-        Check(GetReString(Decorator.DecorateOr(getReList("A|(BC)|D"))) == "((A|(BC))|D)");
-        Check(GetReString(Decorator.DecorateOr(getReList("A|(B|C)"))) == "(A|(B|C))");
+        Check(GetReString(Decorator.DecorateOr(Decorator.HandleEscape(getReList("A")))) == "A");
+        Check(GetReString(Decorator.DecorateOr(Decorator.HandleEscape(getReList("AB")))) == "AB");
+        Check(GetReString(Decorator.DecorateOr(Decorator.HandleEscape(getReList("(A)")))) == "(A)");
+        Check(GetReString(Decorator.DecorateOr(Decorator.HandleEscape(getReList("A|B")))) == "(A|B)");
+        Check(GetReString(Decorator.DecorateOr(Decorator.HandleEscape(getReList("A|B|C")))) == "((A|B)|C)");
+        Check(GetReString(Decorator.DecorateOr(Decorator.HandleEscape(getReList("((A|BB)|CCC)")))) == "((A|BB)|CCC)");
+        Check(GetReString(Decorator.DecorateOr(Decorator.HandleEscape(getReList("A|(BC)|D")))) == "((A|(BC))|D)");
+        Check(GetReString(Decorator.DecorateOr(Decorator.HandleEscape(getReList("A|(B|C)")))) == "(A|(B|C))");
     }
 
 
@@ -178,6 +176,33 @@ public class Ut
         UtSplitToken();
         UtDecoratorOr();
         UtDecorateInternal();
+    }
+
+    private void UtEscape()
+    {
+        string re = "\\\\";
+        NFA nfa = NFA.Build(re);
+        Check(nfa.Recognize("\\") == true);
+        Check(nfa.Recognize("\\\\") == false);
+
+        re = "\\+";
+        nfa = NFA.Build(re);
+        Check(nfa.Recognize("+") == true);
+        Check(nfa.Recognize("\\+") == false);
+
+        re = "\\[";
+        nfa = NFA.Build(re);
+        Check(nfa.Recognize("[") == true);
+        Check(nfa.Recognize("\\[") == false);
+
+        re = "[\t\n]";
+        nfa = NFA.Build(re);
+        Check(nfa.Recognize("\t") == true);
+        Check(nfa.Recognize("\n") == true);
+
+        re = "[ \t\n]*";
+        nfa = NFA.Build(re);
+        Check(nfa.Recognize("  \t \n   \t\n ") == true);
     }
 
     private void UtStepRecognize()
