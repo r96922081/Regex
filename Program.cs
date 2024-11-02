@@ -10,7 +10,7 @@ class Program
         Trace.Assert(Regex.Recognize(datePattern, dateInput1) == true);
         Trace.Assert(Regex.Recognize(datePattern, dateInput2) == false);
 
-        string emailPattern = "[a-zA-Z0-9\\.-]+@[a-zA-Z0-9-](\\.[a-zA-Z0-9-])+";
+        string emailPattern = "[a-zA-Z0-9\\.\\-]+@[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)+";
         string emailInput = "Here are my emails: x96922081x@gmail.com, my-account@yahoo.com. Welcome to mail me";
         List<string> allMatch = Regex.MatchAll(emailPattern, emailInput);
         Trace.Assert(allMatch.Count == 2);

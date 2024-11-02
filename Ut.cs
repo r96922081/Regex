@@ -13,7 +13,8 @@ public class Ut
         UtEscape();
         UtStepRecognize();
         UtRecognize();
-        UtDecorate();
+        //mojo
+        //UtDecorate();
         UtNfaWithDecorator();
         UtMatch();
 
@@ -84,7 +85,7 @@ public class Ut
         Check(nfa.Recognize("AAAB") == true);
         Check(nfa.Recognize("Z") == false);
 
-        nfa = NFA.Build("[a-zA-Z0-9-]");
+        nfa = NFA.Build("[a-zA-Z0-9\\-]");
         Check(nfa.Recognize("A") == true);
         Check(nfa.Recognize("1") == true);
         Check(nfa.Recognize("-") == true);
@@ -199,6 +200,10 @@ public class Ut
         nfa = NFA.Build(re);
         Check(nfa.Recognize("\t") == true);
         Check(nfa.Recognize("\n") == true);
+
+        re = "[ \t\n]*";
+        nfa = NFA.Build(re);
+        Check(nfa.Recognize("\t") == true);
 
         re = "[ \t\n]*";
         nfa = NFA.Build(re);

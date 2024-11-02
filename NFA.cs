@@ -131,47 +131,47 @@ public class NFA
         for (int i = 0; i < reList.Count; i++)
         {
             State s = states[i];
-            char c = s.re.c;
-            if (IsAlphabet(c))
+            ReType type = s.re.type;
+            if (type == ReType.Char || type == ReType.MultipleChars || type == ReType.AllChar)
                 s.matchTransition = states[i + 1];
-            else if (c == '(' || c == ')' || c == '*')
+            else if (type == ReType.LeftParentBracket || type == ReType.RightParentBracket || type == ReType.Star)
                 s.epislonTransition.Add(states[i + 1]);
 
-            if (c == '(' || c == '|')
+            if (type == ReType.LeftParentBracket || type == ReType.Or)
             {
                 operatorStack.Push(s);
             }
-            else if (c == ')')
+            else if (type == ReType.RightParentBracket)
             {
                 State op = operatorStack.Pop();
 
                 State nextState = states[i + 1];
 
-                if (op.re.c == '|')
+                if (op.re.type == ReType.Or)
                 {
                     State op2 = operatorStack.Pop();
                     op2.epislonTransition.Add(states[op.index + 1]);
                     op.epislonTransition.Add(s);
 
-                    if (nextState.re.c == '*')
+                    if (nextState.re.type == ReType.Star)
                     {
                         nextState.epislonTransition.Add(op2);
                         op2.epislonTransition.Add(nextState);
                     }
                 }
-                else if (op.re.c == '(')
+                else if (op.re.type == ReType.LeftParentBracket)
                 {
-                    if (nextState.re.c == '*')
+                    if (nextState.re.type == ReType.Star)
                     {
                         nextState.epislonTransition.Add(op);
                         op.epislonTransition.Add(nextState);
                     }
                 }
             }
-            else if (IsAlphabet(c) || c == '*')
+            else if (s.re.type != ReType.LeftParentBracket && s.re.type != ReType.RightParentBracket && s.re.type != ReType.Or)
             {
                 State nextState = states[i + 1];
-                if (nextState.re.c == '*')
+                if (nextState.re.type == ReType.Star)
                 {
                     s.epislonTransition.Add(nextState);
                     nextState.epislonTransition.Add(s);
@@ -317,10 +317,5 @@ public class NFA
             DFS(s, visited, newStates);
 
         return newStates;
-    }
-
-    private static bool IsAlphabet(char c)
-    {
-        return c != '(' && c != ')' && c != '*' && c != '|';
     }
 }

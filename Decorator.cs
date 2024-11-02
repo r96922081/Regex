@@ -4,6 +4,8 @@
     {
         DecoratedRe decorated = ExtractStartAndEndWith(re);
 
+        decorated.reList = HandleEscape(decorated.reList);
+
         decorated.reList = DecorateInternal(decorated.reList);
 
         return decorated;
@@ -34,8 +36,6 @@
     public static List<Re> DecorateInternal(List<Re> reList)
     {
         List<Re> newReList = new List<Re>();
-
-        reList = HandleEscape(reList);
 
         List<List<Re>> reListTokens = SplitToken(reList);
 
@@ -99,17 +99,17 @@
                 // A+ => AA*
                 newReList.AddRange(token);
                 newReList.AddRange(token);
-                newReList.Add(new Re('*', ReType.Char));
+                newReList.Add(new Re('*', ReType.Star));
 
                 i += 1;
             }
             else if (nextToken[0].type == ReType.Question)
             {
                 // A? => (|A)
-                newReList.Add(new Re('(', ReType.Char));
-                newReList.Add(new Re('|', ReType.Char));
+                newReList.Add(new Re('(', ReType.LeftParentBracket));
+                newReList.Add(new Re('|', ReType.Or));
                 newReList.AddRange(token);
-                newReList.Add(new Re(')', ReType.Char));
+                newReList.Add(new Re(')', ReType.RightParentBracket));
 
                 i += 1;
             }
@@ -169,10 +169,10 @@
                         else
                         {
                             // (A|AA)
-                            newReList2.Insert(0, new Re('(', ReType.Char));
-                            newReList2.Add(new Re('|', ReType.Char));
+                            newReList2.Insert(0, new Re('(', ReType.LeftParentBracket));
+                            newReList2.Add(new Re('|', ReType.Or));
                             newReList2.AddRange(newReList3);
-                            newReList2.Add(new Re(')', ReType.Char));
+                            newReList2.Add(new Re(')', ReType.RightParentBracket));
                         }
                     }
 
@@ -215,7 +215,34 @@
 
                 continue;
             }
+            if (c == '.')
+                newReList.Add(new Re((char)65535, ReType.AllChar));
+            else if (c == '|')
+                newReList.Add(new Re((char)65535, ReType.Or));
+            else if (c == '+')
+                newReList.Add(new Re((char)65535, ReType.Plus));
+            else if (c == '-')
+                newReList.Add(new Re((char)65535, ReType.Minus));
+            else if (c == '*')
+                newReList.Add(new Re((char)65535, ReType.Star));
+            else if (c == '?')
+                newReList.Add(new Re((char)65535, ReType.Question));
+            else if (c == '(')
+                newReList.Add(new Re((char)65535, ReType.LeftParentBracket));
+            else if (c == ')')
+                newReList.Add(new Re((char)65535, ReType.RightParentBracket));
+            else if (c == '[')
+                newReList.Add(new Re((char)65535, ReType.LeftBucketBracket));
+            else if (c == ']')
+                newReList.Add(new Re((char)65535, ReType.RightBucketBracket));
+            else if (c == '{')
+                newReList.Add(new Re((char)65535, ReType.LeftCurlyBracket));
+            else if (c == '}')
+                newReList.Add(new Re((char)65535, ReType.RightCurlyBracket));
+            else
+                newReList.Add(new Re(c, ReType.Char));
 
+            /*
             if (c == '.')
                 newReList.Add(new Re(c, ReType.AllChar));
             else if (c == '|')
@@ -224,7 +251,7 @@
                 newReList.Add(new Re(c, ReType.Plus));
             else if (c == '-')
                 newReList.Add(new Re(c, ReType.Minus));
-            else if (c == '-')
+            else if (c == '*')
                 newReList.Add(new Re(c, ReType.Star));
             else if (c == '?')
                 newReList.Add(new Re(c, ReType.Question));
@@ -241,7 +268,7 @@
             else if (c == '}')
                 newReList.Add(new Re(c, ReType.RightCurlyBracket));
             else
-                newReList.Add(new Re(c, ReType.Char));
+                newReList.Add(new Re(c, ReType.Char));*/
         }
 
         return newReList;
