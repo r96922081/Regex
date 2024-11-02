@@ -203,9 +203,16 @@
             if (c == '\\' && i < reList.Count - 1)
             {
                 char c2 = reList[i + 1].c;
-                if (new List<char> { '.', '|', '+', '-', '*', '?', '(', ')', '[', ']', '{', '}', '\\' }.Contains(c2))
+                if (new List<char> { '.', '|', '+', '-', '*', '?', '(', ')', '[', ']', '{', '}', '\\', 't', 'n', 'r' }.Contains(c2))
                 {
-                    newReList.Add(new Re(c2, ReType.Char));
+                    if (c2 == 't')
+                        newReList.Add(new Re('\t', ReType.Char));
+                    else if (c2 == 'n')
+                        newReList.Add(new Re('\n', ReType.Char));
+                    else if (c2 == 'r')
+                        newReList.Add(new Re('\r', ReType.Char));
+                    else
+                        newReList.Add(new Re(c2, ReType.Char));
                     i++;
                 }
                 else
