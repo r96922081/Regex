@@ -215,34 +215,7 @@
 
                 continue;
             }
-            if (c == '.')
-                newReList.Add(new Re((char)65535, ReType.AllChar));
-            else if (c == '|')
-                newReList.Add(new Re((char)65535, ReType.Or));
-            else if (c == '+')
-                newReList.Add(new Re((char)65535, ReType.Plus));
-            else if (c == '-')
-                newReList.Add(new Re((char)65535, ReType.Minus));
-            else if (c == '*')
-                newReList.Add(new Re((char)65535, ReType.Star));
-            else if (c == '?')
-                newReList.Add(new Re((char)65535, ReType.Question));
-            else if (c == '(')
-                newReList.Add(new Re((char)65535, ReType.LeftParentBracket));
-            else if (c == ')')
-                newReList.Add(new Re((char)65535, ReType.RightParentBracket));
-            else if (c == '[')
-                newReList.Add(new Re((char)65535, ReType.LeftBucketBracket));
-            else if (c == ']')
-                newReList.Add(new Re((char)65535, ReType.RightBucketBracket));
-            else if (c == '{')
-                newReList.Add(new Re((char)65535, ReType.LeftCurlyBracket));
-            else if (c == '}')
-                newReList.Add(new Re((char)65535, ReType.RightCurlyBracket));
-            else
-                newReList.Add(new Re(c, ReType.Char));
 
-            /*
             if (c == '.')
                 newReList.Add(new Re(c, ReType.AllChar));
             else if (c == '|')
@@ -268,7 +241,7 @@
             else if (c == '}')
                 newReList.Add(new Re(c, ReType.RightCurlyBracket));
             else
-                newReList.Add(new Re(c, ReType.Char));*/
+                newReList.Add(new Re(c, ReType.Char));
         }
 
         return newReList;
