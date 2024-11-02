@@ -43,13 +43,13 @@
         {
             List<Re> token = reListTokens[i];
 
-            if (token[0].type == ReType.LeftParentBracket)
+            if (token[0].c == '(' && token[0].type == ReType.MetaCharacter)
             {
                 token = DecorateInternal(token.GetRange(1, token.Count - 2));
-                token.Insert(0, new Re('(', ReType.LeftParentBracket));
-                token.Add(new Re(')', ReType.RightParentBracket));
+                token.Insert(0, new Re('(', ReType.MetaCharacter));
+                token.Add(new Re(')', ReType.MetaCharacter));
             }
-            else if (token[0].type == ReType.LeftBucketBracket)
+            else if (token[0].c == '[' && token[0].type == ReType.MetaCharacter)
             {
                 token = token.GetRange(1, token.Count - 2);
                 List<char> chars = new List<char>();
@@ -67,7 +67,7 @@
                         secondNextRe = token[j + 2];
                     }
 
-                    if (nextRe != null && nextRe.type == ReType.Minus)
+                    if (nextRe != null && (nextRe.c == '-' && nextRe.type == ReType.MetaCharacter))
                     {
                         for (char c = re.c; c <= secondNextRe.c; c++)
                         {
@@ -94,26 +94,26 @@
 
             nextToken = reListTokens[i + 1];
 
-            if (nextToken[0].type == ReType.Plus)
+            if (nextToken[0].c == '+' && nextToken[0].type == ReType.MetaCharacter)
             {
                 // A+ => AA*
                 newReList.AddRange(token);
                 newReList.AddRange(token);
-                newReList.Add(new Re('*', ReType.Star));
+                newReList.Add(new Re('*', ReType.MetaCharacter));
 
                 i += 1;
             }
-            else if (nextToken[0].type == ReType.Question)
+            else if (nextToken[0].c == '?' && nextToken[0].type == ReType.MetaCharacter)
             {
                 // A? => (|A)
-                newReList.Add(new Re('(', ReType.LeftParentBracket));
-                newReList.Add(new Re('|', ReType.Or));
+                newReList.Add(new Re('(', ReType.MetaCharacter));
+                newReList.Add(new Re('|', ReType.MetaCharacter));
                 newReList.AddRange(token);
-                newReList.Add(new Re(')', ReType.RightParentBracket));
+                newReList.Add(new Re(')', ReType.MetaCharacter));
 
                 i += 1;
             }
-            else if (nextToken[0].type == ReType.LeftCurlyBracket)
+            else if (nextToken[0].c == '{' && nextToken[0].type == ReType.MetaCharacter)
             {
                 nextToken = nextToken.GetRange(1, nextToken.Count - 2);
 
@@ -121,7 +121,7 @@
 
                 for (int j = 0; j < nextToken.Count; j++)
                 {
-                    if (nextToken[j].type == ReType.Minus)
+                    if (nextToken[j].c == '-' && nextToken[j].type == ReType.MetaCharacter)
                     {
                         dash = j;
                         break;
@@ -169,10 +169,10 @@
                         else
                         {
                             // (A|AA)
-                            newReList2.Insert(0, new Re('(', ReType.LeftParentBracket));
-                            newReList2.Add(new Re('|', ReType.Or));
+                            newReList2.Insert(0, new Re('(', ReType.MetaCharacter));
+                            newReList2.Add(new Re('|', ReType.MetaCharacter));
                             newReList2.AddRange(newReList3);
-                            newReList2.Add(new Re(')', ReType.RightParentBracket));
+                            newReList2.Add(new Re(')', ReType.MetaCharacter));
                         }
                     }
 
@@ -224,29 +224,29 @@
             }
 
             if (c == '.')
-                newReList.Add(new Re(c, ReType.AllChar));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == '|')
-                newReList.Add(new Re(c, ReType.Or));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == '+')
-                newReList.Add(new Re(c, ReType.Plus));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == '-')
-                newReList.Add(new Re(c, ReType.Minus));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == '*')
-                newReList.Add(new Re(c, ReType.Star));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == '?')
-                newReList.Add(new Re(c, ReType.Question));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == '(')
-                newReList.Add(new Re(c, ReType.LeftParentBracket));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == ')')
-                newReList.Add(new Re(c, ReType.RightParentBracket));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == '[')
-                newReList.Add(new Re(c, ReType.LeftBucketBracket));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == ']')
-                newReList.Add(new Re(c, ReType.RightBucketBracket));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == '{')
-                newReList.Add(new Re(c, ReType.LeftCurlyBracket));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else if (c == '}')
-                newReList.Add(new Re(c, ReType.RightCurlyBracket));
+                newReList.Add(new Re(c, ReType.MetaCharacter));
             else
                 newReList.Add(new Re(c, ReType.Char));
         }
@@ -265,12 +265,12 @@
         {
             Re re = reList[i];
 
-            if (re.type == ReType.LeftParentBracket)
+            if (re.c == '(' && re.type == ReType.MetaCharacter)
             {
                 braceToken.Add(re);
                 braceLevel += 1;
             }
-            else if (re.type == ReType.RightParentBracket)
+            else if (re.c == ')' && re.type == ReType.MetaCharacter)
             {
                 braceToken.Add(re);
                 braceLevel -= 1;
@@ -284,27 +284,27 @@
             {
                 if (braceLevel == 0)
                 {
-                    if (re.type == ReType.LeftCurlyBracket)
+                    if (re.c == '{' && re.type == ReType.MetaCharacter)
                     {
                         List<Re> token = new List<Re>();
                         while (true)
                         {
                             token.Add(reList[i]);
 
-                            if (reList[i].type == ReType.RightCurlyBracket)
+                            if (reList[i].c == '}' && reList[i].type == ReType.MetaCharacter)
                                 break;
                             i++;
                         }
                         tokens.Add(token);
                     }
-                    else if (re.type == ReType.LeftBucketBracket)
+                    else if (re.c == '[' && re.type == ReType.MetaCharacter)
                     {
                         List<Re> token = new List<Re>();
                         while (true)
                         {
                             token.Add(reList[i]);
 
-                            if (reList[i].type == ReType.RightBucketBracket)
+                            if (reList[i].c == ']' && reList[i].type == ReType.MetaCharacter)
                                 break;
                             i++;
                         }
@@ -338,17 +338,17 @@
 
         for (int i = 0; i < reList.Count; i++)
         {
-            if (reList[i].type == ReType.LeftParentBracket)
+            if (reList[i].c == '(' && reList[i].type == ReType.MetaCharacter)
             {
                 token.Add(reList[i]);
                 braceLevel += 1;
             }
-            else if (reList[i].type == ReType.RightParentBracket)
+            else if (reList[i].c == ')' && reList[i].type == ReType.MetaCharacter)
             {
                 token.Add(reList[i]);
                 braceLevel -= 1;
             }
-            else if (reList[i].type == ReType.Or)
+            else if (reList[i].c == '|' && reList[i].type == ReType.MetaCharacter)
             {
                 if (braceLevel == 0)
                 {
@@ -382,10 +382,10 @@
                 }
                 else
                 {
-                    newReList.Insert(0, new Re('(', ReType.LeftParentBracket));
-                    newReList.Add(new Re('|', ReType.Or));
+                    newReList.Insert(0, new Re('(', ReType.MetaCharacter));
+                    newReList.Add(new Re('|', ReType.MetaCharacter));
                     newReList.AddRange(tokens[i]);
-                    newReList.Add(new Re(')', ReType.RightParentBracket));
+                    newReList.Add(new Re(')', ReType.MetaCharacter));
                 }
             }
         }

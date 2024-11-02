@@ -13,8 +13,7 @@ public class Ut
         UtEscape();
         UtStepRecognize();
         UtRecognize();
-        //mojo
-        //UtDecorate();
+        UtDecorate();
         UtNfaWithDecorator();
         UtMatch();
 
@@ -144,32 +143,31 @@ public class Ut
 
     private void UtDecorateInternal()
     {
-        Check(GetReString(Decorator.DecorateInternal(getReList("A"))) == "A");
-        Check(GetReString(Decorator.DecorateInternal(getReList("ABC"))) == "ABC");
-        Check(GetReString(Decorator.DecorateInternal(getReList("A|B"))) == "(A|B)");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(Decorator.HandleEscape(getReList("A"))))) == "A");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("ABC")))) == "ABC");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("A|B")))) == "(A|B)");
 
-        Check(GetReString(Decorator.DecorateInternal(getReList("A+"))) == "AA*");
-        Check(GetReString(Decorator.DecorateInternal(getReList("A?"))) == "(|A)");
-        Check(GetReString(Decorator.DecorateInternal(getReList("A{3}"))) == "AAA");
-        Check(GetReString(Decorator.DecorateInternal(getReList("A{2-4}"))) == "((AA|AAA)|AAAA)");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("A+")))) == "AA*");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("A?")))) == "(|A)");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("A{3}")))) == "AAA");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("A{2-4}")))) == "((AA|AAA)|AAAA)");
 
-        Check(GetReString(Decorator.DecorateInternal(getReList("BA+"))) == "BAA*");
-        Check(GetReString(Decorator.DecorateInternal(getReList("BA?"))) == "B(|A)");
-        Check(GetReString(Decorator.DecorateInternal(getReList("BA{3}"))) == "BAAA");
-        Check(GetReString(Decorator.DecorateInternal(getReList("BA{2-4}"))) == "B((AA|AAA)|AAAA)");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("BA+")))) == "BAA*");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("BA?")))) == "B(|A)");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("BA{3}")))) == "BAAA");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("BA{2-4}")))) == "B((AA|AAA)|AAAA)");
 
-        Check(GetReString(Decorator.DecorateInternal(getReList("B(CD)+"))) == "B(CD)(CD)*");
-        Check(GetReString(Decorator.DecorateInternal(getReList("B(CD)?"))) == "B(|(CD))");
-        Check(GetReString(Decorator.DecorateInternal(getReList("B(CD){3}"))) == "B(CD)(CD)(CD)");
-        Check(GetReString(Decorator.DecorateInternal(getReList("B(CD){2-4}"))) == "B(((CD)(CD)|(CD)(CD)(CD))|(CD)(CD)(CD)(CD))");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("B(CD)+")))) == "B(CD)(CD)*");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("B(CD)?")))) == "B(|(CD))");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("B(CD){3}")))) == "B(CD)(CD)(CD)");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("B(CD){2-4}")))) == "B(((CD)(CD)|(CD)(CD)(CD))|(CD)(CD)(CD)(CD))");
 
-        Check(GetReString(Decorator.DecorateInternal(getReList("B|A+"))) == "(B|AA*)");
-        Check(GetReString(Decorator.DecorateInternal(getReList("B|A?"))) == "(B|(|A))");
-        Check(GetReString(Decorator.DecorateInternal(getReList("B|A{3}"))) == "(B|AAA)");
-        Check(GetReString(Decorator.DecorateInternal(getReList("B|A{2-4}"))) == "(B|((AA|AAA)|AAAA))");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("B|A+")))) == "(B|AA*)");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("B|A?")))) == "(B|(|A))");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("B|A{3}")))) == "(B|AAA)");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("B|A{2-4}")))) == "(B|((AA|AAA)|AAAA))");
 
-        string xxx = GetReString(Decorator.DecorateInternal(getReList("((A+)B)+))")));
-        Check(GetReString(Decorator.DecorateInternal(getReList("((A+)B)+))"))) == "((AA*)B)((AA*)B)*");
+        Check(GetReString(Decorator.DecorateInternal(Decorator.HandleEscape(getReList("((A+)B)+))")))) == "((AA*)B)((AA*)B)*");
     }
 
     private void UtDecorate()

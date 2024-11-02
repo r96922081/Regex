@@ -15,18 +15,7 @@ public enum ReType
 {
     Char, // a, Z, (, ...
     MultipleChars, // [a-zA-Z0-9]
-    AllChar, // .
-    Or, // |
-    Plus, // +
-    Minus, // -
-    Star, // *
-    Question, // ?
-    LeftParentBracket, // (
-    RightParentBracket, // )
-    LeftBucketBracket, // [
-    RightBucketBracket, // ]
-    LeftCurlyBracket, // {
-    RightCurlyBracket, // }
+    MetaCharacter, // \ ^ | . $ ? * + ( ) [ {   ,   no ] } ?
     None
 }
 
@@ -131,47 +120,48 @@ public class NFA
         for (int i = 0; i < reList.Count; i++)
         {
             State s = states[i];
+            char c = s.re.c;
             ReType type = s.re.type;
-            if (type == ReType.Char || type == ReType.MultipleChars || type == ReType.AllChar)
+            if (type == ReType.Char || type == ReType.MultipleChars || (c == '.' && type == ReType.MetaCharacter))
                 s.matchTransition = states[i + 1];
-            else if (type == ReType.LeftParentBracket || type == ReType.RightParentBracket || type == ReType.Star)
+            else if (type == ReType.MetaCharacter && (c == '(' || c == ')' || c == '*'))
                 s.epislonTransition.Add(states[i + 1]);
 
-            if (type == ReType.LeftParentBracket || type == ReType.Or)
+            if ((c == '(' && type == ReType.MetaCharacter) || (c == '|' && type == ReType.MetaCharacter))
             {
                 operatorStack.Push(s);
             }
-            else if (type == ReType.RightParentBracket)
+            else if (c == ')' && type == ReType.MetaCharacter)
             {
                 State op = operatorStack.Pop();
 
                 State nextState = states[i + 1];
 
-                if (op.re.type == ReType.Or)
+                if (op.re.c == '|' && op.re.type == ReType.MetaCharacter)
                 {
                     State op2 = operatorStack.Pop();
                     op2.epislonTransition.Add(states[op.index + 1]);
                     op.epislonTransition.Add(s);
 
-                    if (nextState.re.type == ReType.Star)
+                    if (nextState.re.c == '*' && nextState.re.type == ReType.MetaCharacter)
                     {
                         nextState.epislonTransition.Add(op2);
                         op2.epislonTransition.Add(nextState);
                     }
                 }
-                else if (op.re.type == ReType.LeftParentBracket)
+                else if (op.re.c == '(' && op.re.type == ReType.MetaCharacter)
                 {
-                    if (nextState.re.type == ReType.Star)
+                    if (nextState.re.c == '*' && nextState.re.type == ReType.MetaCharacter)
                     {
                         nextState.epislonTransition.Add(op);
                         op.epislonTransition.Add(nextState);
                     }
                 }
             }
-            else if (s.re.type != ReType.LeftParentBracket && s.re.type != ReType.RightParentBracket && s.re.type != ReType.Or)
+            else if (s.re.type != ReType.MetaCharacter || (s.re.c != '(' && s.re.c != ')' && s.re.c != '|'))
             {
                 State nextState = states[i + 1];
-                if (nextState.re.type == ReType.Star)
+                if (nextState.re.c == '*' && nextState.re.type == ReType.MetaCharacter)
                 {
                     s.epislonTransition.Add(nextState);
                     nextState.epislonTransition.Add(s);
@@ -250,7 +240,7 @@ public class NFA
                     }
                 }
             }
-            else if (s.re.type == ReType.AllChar)
+            else if (s.re.c == '.' && s.re.type == ReType.MetaCharacter)
             {
                 nextAvailableStates.Add(s.matchTransition);
             }
