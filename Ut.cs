@@ -11,6 +11,7 @@ public class Ut
 
     public void RunAllUt()
     {
+        NewRegex.Ut2.Ut();
         UtEscape();
         UtStepRecognize();
         UtRecognize();
