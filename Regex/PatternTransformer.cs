@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace RegexNs
+﻿namespace RegexNs
 {
     public class PatternChar
     {
@@ -14,36 +12,21 @@ namespace RegexNs
             type = PatternCharType.Char;
         }
 
-        public PatternChar(char c, bool escaped)
-        {
-            this.c = c;
-            type = PatternCharType.Char;
-            this.escaped = escaped;
-        }
-
         public PatternChar(char c, PatternCharType type)
         {
             this.c = c;
             this.type = type;
         }
 
-        public PatternChar(char c, PatternCharType type, bool escaped)
-        {
-            this.c = c;
-            this.type = type;
-            this.escaped = escaped;
-        }
-
         public char c = '\0';
         public List<char> multipleChars = new List<char>();
         public bool not = false;
-        public bool escaped = false;
 
         public PatternCharType type = PatternCharType.None;
 
         public PatternChar Clone()
         {
-            PatternChar pc = new PatternChar(c, type, escaped);
+            PatternChar pc = new PatternChar(c, type);
             pc.not = not;
             pc.multipleChars.AddRange(multipleChars);
 
@@ -61,12 +44,6 @@ namespace RegexNs
 
     public class PatternTransformer
     {
-        static void Check(bool b)
-        {
-            if (!b)
-                Trace.Assert(false);
-        }
-
         public static List<PatternChar> ToPatternChar(string pattern)
         {
             List<PatternChar> patternChars = new List<PatternChar>();
@@ -91,7 +68,7 @@ namespace RegexNs
                 {
                     if (escapedChars1.Contains(patternChars[i + 1].c))
                     {
-                        newPatternChars.Add(new PatternChar(patternChars[i + 1].c, true));
+                        newPatternChars.Add(new PatternChar(patternChars[i + 1].c));
                         i++;
                     }
                     else if (shorthand.Contains(patternChars[i + 1].c))
@@ -101,17 +78,17 @@ namespace RegexNs
                     }
                     else if (patternChars[i + 1].c == 'n')
                     {
-                        newPatternChars.Add(new PatternChar('\n', true));
+                        newPatternChars.Add(new PatternChar('\n'));
                         i++;
                     }
                     else if (patternChars[i + 1].c == 'r')
                     {
-                        newPatternChars.Add(new PatternChar('\r', true));
+                        newPatternChars.Add(new PatternChar('\r'));
                         i++;
                     }
                     else if (patternChars[i + 1].c == 't')
                     {
-                        newPatternChars.Add(new PatternChar('\t', true));
+                        newPatternChars.Add(new PatternChar('\t'));
                         i++;
                     }
                 }
@@ -478,12 +455,12 @@ namespace RegexNs
                             j = leftCurlyBracket - 1;
                         }
 
-                        // a+ => subRe = a
-                        // (abc)+ => subRe = (abc)
-                        List<PatternChar> subRe = new List<PatternChar>();
+                        // a+ => subPattern = a
+                        // (abc)+ => subPattern = (abc)
+                        List<PatternChar> subPattern = new List<PatternChar>();
                         if (newPatternChars[j].c == ')' && newPatternChars[j].type == PatternCharType.MetaChar)
                         {
-                            subRe.Insert(0, newPatternChars[j]);
+                            subPattern.Insert(0, newPatternChars[j]);
                             j--;
                             int level = 1;
 
@@ -494,7 +471,7 @@ namespace RegexNs
                                 else if (newPatternChars[j].c == '(' && newPatternChars[j].type == PatternCharType.MetaChar)
                                     level--;
 
-                                subRe.Insert(0, newPatternChars[j]);
+                                subPattern.Insert(0, newPatternChars[j]);
 
                                 if (level == 0)
                                 {
@@ -505,7 +482,7 @@ namespace RegexNs
                         }
                         else
                         {
-                            subRe.Add(newPatternChars[j]);
+                            subPattern.Add(newPatternChars[j]);
                             j--;
                         }
 
@@ -514,14 +491,14 @@ namespace RegexNs
                             // A+ = AA*
                             // (abc)+ = (abc)(abc)*
                             nextNewPatternChars.Insert(0, new PatternChar('*', PatternCharType.MetaChar));
-                            nextNewPatternChars.InsertRange(0, RepeatPatternChar(subRe, 2));
+                            nextNewPatternChars.InsertRange(0, RepeatPatternChar(subPattern, 2));
                         }
                         else if (c.c == '?')
                         {
                             // A? = (|A)
                             // (abc)? = (|(abc))
                             nextNewPatternChars.Insert(0, new PatternChar(')', PatternCharType.MetaChar));
-                            nextNewPatternChars.InsertRange(0, RepeatPatternChar(subRe, 1));
+                            nextNewPatternChars.InsertRange(0, RepeatPatternChar(subPattern, 1));
                             nextNewPatternChars.Insert(0, new PatternChar('|', PatternCharType.MetaChar));
                             nextNewPatternChars.Insert(0, new PatternChar('(', PatternCharType.MetaChar));
                         }
@@ -532,13 +509,13 @@ namespace RegexNs
                                 // A{2-} = AAA*
                                 // (abc){2-} = (abc)(abc)(abc)*
                                 nextNewPatternChars.Insert(0, new PatternChar('*', PatternCharType.MetaChar));
-                                nextNewPatternChars.InsertRange(0, RepeatPatternChar(subRe, countStart + 1));
+                                nextNewPatternChars.InsertRange(0, RepeatPatternChar(subPattern, countStart + 1));
                             }
                             else if (countStart == countEnd)
                             {
                                 // A{3} = AAA
                                 // (abc){3} = (abc)(abc)(abc)
-                                nextNewPatternChars.InsertRange(0, RepeatPatternChar(subRe, countStart));
+                                nextNewPatternChars.InsertRange(0, RepeatPatternChar(subPattern, countStart));
                             }
                             else
                             {
@@ -554,7 +531,7 @@ namespace RegexNs
                                         temp.Add(new PatternChar('|', PatternCharType.MetaChar));
                                     }
 
-                                    temp.AddRange(RepeatPatternChar(subRe, k));
+                                    temp.AddRange(RepeatPatternChar(subPattern, k));
 
                                     if (k != countStart)
                                         temp.Add(new PatternChar(')', PatternCharType.MetaChar));

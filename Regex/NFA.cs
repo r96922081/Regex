@@ -39,9 +39,8 @@
         public List<PatternChar> patternChars = null;
 
         // One "|" must be used with one ()
-        // for example, (((AB|BC)|DE)|FG)
+        // for example, ((A|B)|C)
         // so in the operatorStack, when encounter a '|', the next pop must be '('
-
         public static NFA Build(string pattern)
         {
             NFA nfa = new NFA();

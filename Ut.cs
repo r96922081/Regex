@@ -489,5 +489,6 @@ public class UtAll
         UtStepRecognize();
         UtMatch();
         UtMatchAll();
+        Console.WriteLine("Ut Done");
     }
 }
