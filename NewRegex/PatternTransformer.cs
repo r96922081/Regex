@@ -589,11 +589,31 @@ namespace NewRegex
             return ret;
         }
 
-        public static List<PatternChar> Transform(string pattern)
+        public static List<PatternChar> TransformStartsWithEndsWith(List<PatternChar> patternChars, ref bool startsWith, ref bool endsWith)
+        {
+            if (patternChars.Count > 0 && patternChars[0].c == '^' && patternChars[0].escaped == false)
+            {
+                startsWith = true;
+                patternChars.RemoveAt(0);
+            }
+
+            if (patternChars.Count > 0 && patternChars[patternChars.Count - 1].c == '$' && patternChars[patternChars.Count - 1].escaped == false)
+            {
+                endsWith = true;
+                patternChars.RemoveAt(patternChars.Count - 1);
+            }
+
+
+            return patternChars;
+        }
+
+
+        public static List<PatternChar> Transform(string pattern, ref bool startsWith, ref bool endsWith)
         {
             List<PatternChar> patternChars = ToPatternChar(pattern);
 
             patternChars = TransformEscape(patternChars);
+            patternChars = TransformStartsWithEndsWith(patternChars, ref startsWith, ref endsWith);
             patternChars = TransformShorthand(patternChars);
             patternChars = TransformSquareBracket(patternChars);
             patternChars = ModifyParentsisBetweenOr(patternChars);

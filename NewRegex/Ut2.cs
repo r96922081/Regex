@@ -385,8 +385,26 @@ namespace NewRegex
             Check(nfa.Recognize("-") == true);
             Check(nfa.Recognize("@") == false);
 
+            nfa = NFA.Build("[^abc]+");
+            Check(nfa.Recognize("a") == false);
+            Check(nfa.Recognize("ddd") == true);
+            Check(nfa.Recognize("dda") == false);
+            Check(nfa.Recognize("dddee") == true);
+
+            nfa = NFA.Build("\\w");
+            Check(nfa.Recognize("a") == true);
+            Check(nfa.Recognize("@") == false);
+
+            nfa = NFA.Build("\\W");
+            Check(nfa.Recognize("a") == false);
+            Check(nfa.Recognize("@") == true);
+
             nfa = NFA.Build("A\tB\nC\rD\\\\E");
             Check(nfa.Recognize("A\tB\nC\rD\\E") == true);
+
+            nfa = NFA.Build("^[1-9][0-9]{3}\\-[0-3][0-9]\\-[0-3][0-9]");
+            Check(nfa.Recognize("2024-12-25") == true);
+            Check(nfa.Recognize("024-99-99") == false);
         }
 
         private static void UtStepRecognize()
@@ -405,7 +423,59 @@ namespace NewRegex
             Check(nfa.StepRecognize('A', param) == RecognizeResult.AliveButNotAccept);
             Check(nfa.StepRecognize('B', param) == RecognizeResult.AliveAndAccept);
             Check(nfa.StepRecognize('C', param) == RecognizeResult.EndAndReject);
+        }
 
+        private static void UtMatch()
+        {
+            NFA nfa = NFA.Build("A*");
+            Check(nfa.Match("AAABC") == "AAA");
+            Check(nfa.Match("B") == "");
+
+            nfa = NFA.Build("AB");
+            Check(nfa.Match("A") == "");
+            Check(nfa.Match("AAABB") == "AB");
+            Check(nfa.Match("XABAAA") == "AB");
+
+            nfa = NFA.Build("(AB)+");
+            Check(nfa.Match("A") == "");
+            Check(nfa.Match("ABB") == "AB");
+            Check(nfa.Match("ABABABB") == "ABABAB");
+            Check(nfa.Match("XABABABB") == "ABABAB");
+
+            nfa = NFA.Build("^AB+");
+            Check(nfa.Match("ABBBC") == "ABBB");
+            Check(nfa.Match("XAB") == "");
+
+            nfa = NFA.Build("AB+$");
+            Check(nfa.Match("CABBB") == "ABBB");
+            Check(nfa.Match("ABBBC") == "");
+
+            nfa = NFA.Build("A\\$");
+            Check(nfa.Match("BA$B") == "A$");
+
+            nfa = NFA.Build("\\^\\$");
+            Check(nfa.Match("^$") == "^$");
+
+            nfa = NFA.Build("^ABC$");
+            Check(nfa.Match("ABC") == "ABC");
+            Check(nfa.Match("DABC") == "");
+            Check(nfa.Match("ABCD") == "");
+
+            nfa = NFA.Build("^AB+$");
+            Check(nfa.Match("ABBB") == "ABBB");
+            Check(nfa.Match("ABBBC") == "");
+            Check(nfa.Match("CABBB") == "");
+        }
+
+        private static void UtMatchAll()
+        {
+            string emailPattern = "[a-zA-Z0-9\\.\\-]+@[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)+";
+            string emailInput = "Here are my emails: x96922081x@gmail.com, my-account@yahoo.com. Welcome to mail me";
+
+            List<string> allMatch = Regex.MatchAll(emailPattern, emailInput);
+            Check(allMatch.Count == 2);
+            Check(allMatch[0] == "x96922081x@gmail.com");
+            Check(allMatch[1] == "my-account@yahoo.com");
         }
 
         public static void Ut()
@@ -418,6 +488,8 @@ namespace NewRegex
             UtTransformSuffix();
             UtRecognize();
             UtStepRecognize();
+            UtMatch();
+            UtMatchAll();
         }
     }
 }

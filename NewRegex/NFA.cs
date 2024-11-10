@@ -46,9 +46,7 @@
         {
             NFA nfa = new NFA();
 
-            nfa.patternChars = PatternTransformer.Transform(pattern);
-            nfa.startsWith = false;
-            nfa.endsWith = false;
+            nfa.patternChars = PatternTransformer.Transform(pattern, ref nfa.startsWith, ref nfa.endsWith);
 
             List<State> states = new List<State>();
             for (int i = 0; i < nfa.patternChars.Count; i++)
@@ -182,14 +180,12 @@
                 }
                 else if (s.pc.type == PatternCharType.MultipleChar)
                 {
-                    foreach (char c2 in s.pc.multipleChars)
-                    {
-                        if (c2 == c)
-                        {
-                            nextAvailableStates.Add(s.matchTransition);
-                            break;
-                        }
-                    }
+                    bool match = s.pc.multipleChars.Contains(c);
+                    if (s.pc.not)
+                        match = !match;
+
+                    if (match)
+                        nextAvailableStates.Add(s.matchTransition);
                 }
                 else if (s.pc.c == '.' && s.pc.type == PatternCharType.MetaChar)
                 {
