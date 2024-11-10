@@ -1,4 +1,4 @@
-﻿namespace NewRegex
+﻿namespace RegexNs
 {
     public class PatternChecker
     {

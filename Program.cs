@@ -21,7 +21,7 @@ class Program
 
     static void Ut()
     {
-        new Ut().RunAllUt();
+        UtAll.Ut();
     }
 
     static void Main(String[] args)

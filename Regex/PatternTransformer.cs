@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace NewRegex
+namespace RegexNs
 {
     public class PatternChar
     {
@@ -81,7 +81,8 @@ namespace NewRegex
         {
             List<PatternChar> newPatternChars = new List<PatternChar>();
 
-            List<char> escapedChars1 = new List<char>() { '\\', '^', '|', '.', '$', '?', '*', '+', '(', ')', '[', ']', '{', '}', 'd', 'D', 'w', 'W', 's', 'S' };
+            List<char> escapedChars1 = new List<char>() { '\\', '^', '|', '.', '$', '?', '*', '+', '(', ')', '[', ']', '{', '}', };
+            List<char> shorthand = new List<char>() { 'd', 'D', 'w', 'W', 's', 'S' };
 
             for (int i = 0; i < patternChars.Count; i++)
             {
@@ -91,6 +92,11 @@ namespace NewRegex
                     if (escapedChars1.Contains(patternChars[i + 1].c))
                     {
                         newPatternChars.Add(new PatternChar(patternChars[i + 1].c, true));
+                        i++;
+                    }
+                    else if (shorthand.Contains(patternChars[i + 1].c))
+                    {
+                        newPatternChars.Add(new PatternChar(patternChars[i + 1].c, PatternCharType.MetaChar));
                         i++;
                     }
                     else if (patternChars[i + 1].c == 'n')
@@ -224,7 +230,7 @@ namespace NewRegex
             for (int i = 0; i < patternChars.Count; i++)
             {
                 PatternChar pc = patternChars[i];
-                if (pc.escaped && new List<char> { 'd', 'D', 'w', 'W', 's', 'S' }.Contains(pc.c) && i < patternChars.Count)
+                if (pc.type == PatternCharType.MetaChar && new List<char> { 'd', 'D', 'w', 'W', 's', 'S' }.Contains(pc.c) && i < patternChars.Count)
                 {
                     PatternChar patternChar = new PatternChar();
                     patternChar.type = PatternCharType.MultipleChar;
@@ -591,13 +597,13 @@ namespace NewRegex
 
         public static List<PatternChar> TransformStartsWithEndsWith(List<PatternChar> patternChars, ref bool startsWith, ref bool endsWith)
         {
-            if (patternChars.Count > 0 && patternChars[0].c == '^' && patternChars[0].escaped == false)
+            if (patternChars.Count > 0 && patternChars[0].c == '^' && patternChars[0].type == PatternCharType.MetaChar)
             {
                 startsWith = true;
                 patternChars.RemoveAt(0);
             }
 
-            if (patternChars.Count > 0 && patternChars[patternChars.Count - 1].c == '$' && patternChars[patternChars.Count - 1].escaped == false)
+            if (patternChars.Count > 0 && patternChars[patternChars.Count - 1].c == '$' && patternChars[patternChars.Count - 1].type == PatternCharType.MetaChar)
             {
                 endsWith = true;
                 patternChars.RemoveAt(patternChars.Count - 1);
