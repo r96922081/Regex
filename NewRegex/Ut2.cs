@@ -65,10 +65,6 @@ namespace NewRegex
             Check(error.Contains("empty []"));
             error = PatternChecker.Check("{}");
             Check(error.Contains("empty {}"));
-            error = PatternChecker.Check("a|");
-            Check(error.Contains("empty |"));
-            error = PatternChecker.Check("|a");
-            Check(error.Contains("empty |"));
 
             error = PatternChecker.Check("a[b");
             Check(error.Contains("unclosed"));
@@ -109,6 +105,10 @@ namespace NewRegex
             pc = PatternTransformer.ModifyParentsisBetweenOr(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("(|a)")));
             s = string.Concat(pc.Select(pc2 => pc2.c));
             Check(s == "(|a)");
+
+            pc = PatternTransformer.ModifyParentsisBetweenOr(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("a|")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(a|)");
 
             pc = PatternTransformer.ModifyParentsisBetweenOr(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("a|b|c")));
             s = string.Concat(pc.Select(pc2 => pc2.c));

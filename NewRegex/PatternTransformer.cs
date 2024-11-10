@@ -365,6 +365,20 @@ namespace NewRegex
             }
         }
 
+        /*
+        // A+ = AA*
+        // A? = (|A)
+        // A{3} = AAA
+        // A{2-4} = (AA|AAA|AAAA)
+        // A{3-} = AAAA*
+        */
+        public static List<PatternChar> TransformSuffix(List<PatternChar> patternChars)
+        {
+            List<PatternChar> newPatternChars = new List<PatternChar>();
+
+            return newPatternChars;
+        }
+
         public static List<PatternChar> Transform(string pattern)
         {
             List<PatternChar> patternChars = ToPatternChar(pattern);
@@ -373,6 +387,7 @@ namespace NewRegex
             patternChars = TransformShorthand(patternChars);
             patternChars = TransformSquareBracket(patternChars);
             patternChars = ModifyParentsisBetweenOr(patternChars);
+            patternChars = TransformSuffix(patternChars);
 
 
             return patternChars;
