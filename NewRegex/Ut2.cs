@@ -102,6 +102,14 @@ namespace NewRegex
             s = string.Concat(pc.Select(pc2 => pc2.c));
             Check(s == "(ab|cd)");
 
+            pc = PatternTransformer.ModifyParentsisBetweenOr(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("|a")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(|a)");
+
+            pc = PatternTransformer.ModifyParentsisBetweenOr(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("(|a)")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(|a)");
+
             pc = PatternTransformer.ModifyParentsisBetweenOr(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("a|b|c")));
             s = string.Concat(pc.Select(pc2 => pc2.c));
             Check(s == "((a|b)|c)");

@@ -306,6 +306,12 @@ namespace NewRegex
             {
                 token = tokensSplitedByOr[0];
 
+                if (token.Count == 0)
+                {
+                    // the case (|a)
+                    return token;
+                }
+
                 // if (a)(b), return (a)(b)
                 // if abc, return abc
                 // if ((a)(b)), return (a)(b)
