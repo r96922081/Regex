@@ -74,6 +74,15 @@ namespace NewRegex
             Check(error.Contains("unclosed"));
             error = PatternChecker.Check("ab[{}()[\\]]");
             Check(error == null);
+
+            error = PatternChecker.Check("a{3}");
+            Check(error == null);
+            error = PatternChecker.Check("a{1-}");
+            Check(error != null);
+            error = PatternChecker.Check("a{2-a}");
+            Check(error != null);
+            error = PatternChecker.Check("a{-}");
+            Check(error != null);
         }
 
         public static void UtModifyParentsisBetweenOr()
@@ -155,6 +164,64 @@ namespace NewRegex
             Check(s == "((a|(b|c)*)|d?)");
         }
 
+        /*
+        // A+ = AA*
+        // A? = (|A)
+        // A{2} = AA
+        // A{2-3} = (AA|AAA)
+        // A{2-} = AAA*
+        */
+        public static void UtTransformSuffix()
+        {
+            List<PatternChar> pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("abc")));
+            string s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "abc");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("A+")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "AA*");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("d(abc)+")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "d(abc)(abc)*");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("A?")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(|A)");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("(abc)?")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(|(abc))");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("A{2}")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "AA");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("A{2-3}")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(AA|AAA)");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("A{2-}")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "AAA*");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("(abc){2-}")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(abc)(abc)(abc)*");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("AB+")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "ABB*");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("(a(b(cd){2}|ef+)){2}")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(a(b(cd)(cd)|eff*))(a(b(cd)(cd)|eff*))");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("((a(b(cd){2}|ef+)){2})?")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(|((a(b(cd)(cd)|eff*))(a(b(cd)(cd)|eff*))))");
+        }
+
         public static void Ut()
         {
             //UtPatternChecker();
@@ -162,6 +229,7 @@ namespace NewRegex
             UtTransformShorthand();
             UtTransformSquareBracket();
             UtModifyParentsisBetweenOr();
+            UtTransformSuffix();
         }
     }
 }

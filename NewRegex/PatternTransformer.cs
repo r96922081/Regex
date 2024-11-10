@@ -40,6 +40,15 @@ namespace NewRegex
         public bool escaped = false;
 
         public PatternCharType type = PatternCharType.None;
+
+        public PatternChar Clone()
+        {
+            PatternChar pc = new PatternChar(c, type, escaped);
+            pc.not = not;
+            pc.multipleChars.AddRange(multipleChars);
+
+            return pc;
+        }
     }
 
     public enum PatternCharType
@@ -375,8 +384,183 @@ namespace NewRegex
         public static List<PatternChar> TransformSuffix(List<PatternChar> patternChars)
         {
             List<PatternChar> newPatternChars = new List<PatternChar>();
+            List<PatternChar> nextNewPatternChars = new List<PatternChar>();
+            nextNewPatternChars.AddRange(patternChars);
 
-            return newPatternChars;
+            bool keepGoing = true;
+
+            while (keepGoing)
+            {
+                newPatternChars.Clear();
+                newPatternChars.AddRange(nextNewPatternChars);
+                nextNewPatternChars.Clear();
+
+                keepGoing = false;
+
+                for (int i = newPatternChars.Count - 1; i >= 0; i--)
+                {
+                    PatternChar c = newPatternChars[i];
+                    if (c.type == PatternCharType.MetaChar && (c.c == '+' || c.c == '?' || c.c == '}'))
+                    {
+                        int j = i;
+
+                        int countStart = -1;
+                        int countEnd = -1;
+
+                        if (c.c == '+')
+                        {
+                            keepGoing = true;
+                        }
+                        else if (c.c == '?')
+                        {
+                            keepGoing = true;
+                        }
+                        else if (c.c == '}')
+                        {
+                            keepGoing = true;
+
+                            if (newPatternChars[j - 2].c == '{')
+                            {
+                                // A{3} = AAA
+                                countStart = int.Parse("" + newPatternChars[j - 1].c);
+                                countEnd = countStart;
+                                j -= 2;
+                            }
+                            else if (newPatternChars[j - 3].c == '{')
+                            {
+                                // A{3-} = AAAA*
+                                countStart = int.Parse("" + newPatternChars[j - 2].c);
+                                j -= 3;
+                            }
+                            else if (newPatternChars[j - 4].c == '{')
+                            {
+                                // A{2-4} = (AA|AAA|AAAA)
+                                countStart = int.Parse("" + newPatternChars[j - 3].c);
+                                countEnd = int.Parse("" + newPatternChars[j - 1].c);
+                                j -= 4;
+                            }
+                            else
+                            {
+                                Trace.Assert(false);
+                            }
+                        }
+                        j--;
+
+                        // a+ => subRe = a
+                        // (abc)+ => subRe = (abc)
+                        List<PatternChar> subRe = new List<PatternChar>();
+                        if (newPatternChars[j].c == ')' && newPatternChars[j].type == PatternCharType.MetaChar)
+                        {
+                            subRe.Insert(0, newPatternChars[j]);
+                            j--;
+                            int level = 1;
+
+                            for (; j >= 0; j--)
+                            {
+                                if (newPatternChars[j].c == ')' && newPatternChars[j].type == PatternCharType.MetaChar)
+                                    level++;
+                                else if (newPatternChars[j].c == '(' && newPatternChars[j].type == PatternCharType.MetaChar)
+                                    level--;
+
+                                subRe.Insert(0, newPatternChars[j]);
+
+                                if (level == 0)
+                                {
+                                    j--;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            subRe.Add(newPatternChars[j]);
+                            j--;
+                        }
+
+                        if (c.c == '+')
+                        {
+                            // A+ = AA*
+                            // (abc)+ = (abc)(abc)*
+                            nextNewPatternChars.Insert(0, new PatternChar('*', PatternCharType.MetaChar));
+                            nextNewPatternChars.InsertRange(0, RepeatPatternChar(subRe, 2));
+                        }
+                        else if (c.c == '?')
+                        {
+                            // A? = (|A)
+                            // (abc)? = (|(abc))
+                            nextNewPatternChars.Insert(0, new PatternChar(')', PatternCharType.MetaChar));
+                            nextNewPatternChars.InsertRange(0, RepeatPatternChar(subRe, 1));
+                            nextNewPatternChars.Insert(0, new PatternChar('|', PatternCharType.MetaChar));
+                            nextNewPatternChars.Insert(0, new PatternChar('(', PatternCharType.MetaChar));
+                        }
+                        else if (c.c == '}')
+                        {
+                            if (countEnd == -1)
+                            {
+                                // A{2-} = AAA*
+                                // (abc){2-} = (abc)(abc)(abc)*
+                                nextNewPatternChars.Insert(0, new PatternChar('*', PatternCharType.MetaChar));
+                                nextNewPatternChars.InsertRange(0, RepeatPatternChar(subRe, countStart + 1));
+                            }
+                            else if (countStart == countEnd)
+                            {
+                                // A{3} = AAA
+                                // (abc){3} = (abc)(abc)(abc)
+                                nextNewPatternChars.InsertRange(0, RepeatPatternChar(subRe, countStart));
+                            }
+                            else
+                            {
+                                // A{2-3} = (AA|AAA)
+                                // (abc){2-4} = (((abc)(abc)|(abc)(abc)(abc))|(abc)(abc)(abc)(abc))
+
+                                List<PatternChar> temp = new List<PatternChar>();
+                                for (int k = countStart; k <= countEnd; k++)
+                                {
+                                    if (k != countStart)
+                                    {
+                                        temp.Insert(0, new PatternChar('(', PatternCharType.MetaChar));
+                                        temp.Add(new PatternChar('|', PatternCharType.MetaChar));
+                                    }
+
+                                    temp.AddRange(RepeatPatternChar(subRe, k));
+
+                                    if (k != countStart)
+                                        temp.Add(new PatternChar(')', PatternCharType.MetaChar));
+                                }
+
+                                nextNewPatternChars.InsertRange(0, temp);
+                            }
+                        }
+
+                        for (; j >= 0; j--)
+                        {
+                            nextNewPatternChars.Insert(0, newPatternChars[j]);
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        nextNewPatternChars.Insert(0, c);
+                    }
+                }
+            }
+
+            return nextNewPatternChars;
+        }
+
+        private static List<PatternChar> RepeatPatternChar(List<PatternChar> patternChars, int repeatCount)
+        {
+            List<PatternChar> ret = new List<PatternChar>();
+
+            for (int count = 0; count < repeatCount; count++)
+            {
+                for (int k = 0; k < patternChars.Count; k++)
+                {
+                    ret.Add(patternChars[k].Clone());
+                }
+            }
+
+            return ret;
         }
 
         public static List<PatternChar> Transform(string pattern)
