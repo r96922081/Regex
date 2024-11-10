@@ -58,7 +58,7 @@
         {
             List<PatternChar> newPatternChars = new List<PatternChar>();
 
-            List<char> escapedChars1 = new List<char>() { '\\', '^', '|', '.', '$', '?', '*', '+', '(', ')', '[', ']', '{', '}', };
+            List<char> escapedChars = new List<char>() { '\\', '^', '|', '.', '$', '?', '*', '+', '(', ')', '[', ']', '{', '}', };
             List<char> shorthand = new List<char>() { 'd', 'D', 'w', 'W', 's', 'S' };
 
             for (int i = 0; i < patternChars.Count; i++)
@@ -66,7 +66,7 @@
                 PatternChar c = patternChars[i];
                 if (c.c == '\\' && i < patternChars.Count)
                 {
-                    if (escapedChars1.Contains(patternChars[i + 1].c))
+                    if (escapedChars.Contains(patternChars[i + 1].c))
                     {
                         newPatternChars.Add(new PatternChar(patternChars[i + 1].c));
                         i++;
@@ -94,9 +94,7 @@
                 }
                 else
                 {
-                    List<char> escapedChars2 = new List<char>() { '\\', '^', '|', '.', '$', '?', '*', '+', '(', ')', '[', ']', '{', '}' };
-
-                    if (escapedChars2.Contains(c.c))
+                    if (escapedChars.Contains(c.c))
                         newPatternChars.Add(new PatternChar(c.c, PatternCharType.MetaChar));
                     else
                         newPatternChars.Add(c);
