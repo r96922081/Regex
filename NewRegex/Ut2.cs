@@ -21,7 +21,13 @@ namespace NewRegex
 
         public static void UtTransformShorthand()
         {
-            List<PatternChar> pc = PatternTransformer.TransformShorthand(PatternTransformer.ToPatternChar("\\w"));
+            List<PatternChar> pc = PatternTransformer.TransformShorthand(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("\\w")));
+            Check(pc[0].type == PatternCharType.MultipleChar);
+            Check(pc[0].multipleChars.Count == 62); // a-z A-Z 0-9 = 26 + 26 + 10 = 62
+
+            pc = PatternTransformer.TransformShorthand(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("\\\\w")));
+            Check(pc[0].c == '\\');
+            Check(pc[1].c == 'w');
         }
 
         public static void UtTransformSquareBracket()
@@ -205,6 +211,10 @@ namespace NewRegex
             s = string.Concat(pc.Select(pc2 => pc2.c));
             Check(s == "AAA*");
 
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("A{10-11}")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "(AAAAAAAAAA|AAAAAAAAAAA)");
+
             pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("(abc){2-}")));
             s = string.Concat(pc.Select(pc2 => pc2.c));
             Check(s == "(abc)(abc)(abc)*");
@@ -212,6 +222,10 @@ namespace NewRegex
             pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("AB+")));
             s = string.Concat(pc.Select(pc2 => pc2.c));
             Check(s == "ABB*");
+
+            pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("((ab){2}){3}")));
+            s = string.Concat(pc.Select(pc2 => pc2.c));
+            Check(s == "((ab)(ab))((ab)(ab))((ab)(ab))");
 
             pc = PatternTransformer.TransformSuffix(PatternTransformer.TransformEscape(PatternTransformer.ToPatternChar("(a(b(cd){2}|ef+)){2}")));
             s = string.Concat(pc.Select(pc2 => pc2.c));
@@ -222,6 +236,178 @@ namespace NewRegex
             Check(s == "(|((a(b(cd)(cd)|eff*))(a(b(cd)(cd)|eff*))))");
         }
 
+        private static void UtRecognize()
+        {
+            string pattern = "A";
+            NewRegex.NFA nfa = NewRegex.NFA.Build(pattern);
+            Check(nfa.Recognize("A") == true);
+
+            pattern = "AB";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("AB") == true);
+            Check(nfa.Recognize("ABA") == false);
+            Check(nfa.Recognize("ABB") == false);
+            Check(nfa.Recognize("A") == false);
+
+            pattern = "(A|B)";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("A") == true);
+            Check(nfa.Recognize("B") == true);
+            Check(nfa.Recognize("C") == false);
+            Check(nfa.Recognize("AB") == false);
+
+            pattern = "A*";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("") == true);
+            Check(nfa.Recognize("A") == true);
+            Check(nfa.Recognize("AA") == true);
+            Check(nfa.Recognize("AAA") == true);
+            Check(nfa.Recognize("B") == false);
+            Check(nfa.Recognize("AB") == false);
+            Check(nfa.Recognize("AAB") == false);
+            Check(nfa.Recognize("ABB") == false);
+            Check(nfa.Recognize("ABA") == false);
+
+            pattern = "(AB)*";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("") == true);
+            Check(nfa.Recognize("AB") == true);
+            Check(nfa.Recognize("ABAB") == true);
+            Check(nfa.Recognize("ABABABAB") == true);
+            Check(nfa.Recognize("ABA") == false);
+            Check(nfa.Recognize("ABAA") == false);
+
+            pattern = "(A|B)*";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("") == true);
+            Check(nfa.Recognize("AB") == true);
+            Check(nfa.Recognize("ABAB") == true);
+            Check(nfa.Recognize("ABABAB") == true);
+            Check(nfa.Recognize("ABAC") == false);
+            Check(nfa.Recognize("C") == false);
+
+            pattern = "((AB|BC)|DE)";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("A") == false);
+            Check(nfa.Recognize("BC") == true);
+            Check(nfa.Recognize("C") == false);
+            Check(nfa.Recognize("AB") == true);
+            Check(nfa.Recognize("E") == false);
+            Check(nfa.Recognize("DE") == true);
+            Check(nfa.Recognize("ABDE") == false);
+
+            pattern = "((AB|BC)*|DE)";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("") == true);
+            Check(nfa.Recognize("AB") == true);
+            Check(nfa.Recognize("BC") == true);
+            Check(nfa.Recognize("DE") == true);
+            Check(nfa.Recognize("ABBC") == true);
+            Check(nfa.Recognize("ABBCAB") == true);
+            Check(nfa.Recognize("ABDE") == false);
+
+            pattern = "(|A)"; // A?
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("") == true);
+            Check(nfa.Recognize("A") == true);
+            Check(nfa.Recognize("AB") == false);
+            Check(nfa.Recognize("B") == false);
+
+            pattern = "A(A)*"; // A+
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("") == false);
+            Check(nfa.Recognize("A") == true);
+            Check(nfa.Recognize("AA") == true);
+            Check(nfa.Recognize("AAA") == true);
+            Check(nfa.Recognize("AB") == false);
+            Check(nfa.Recognize("B") == false);
+
+            pattern = ".";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("") == false);
+            Check(nfa.Recognize("A") == true);
+            Check(nfa.Recognize("B") == true);
+            Check(nfa.Recognize("AB") == false);
+
+            pattern = ".A";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize("AA") == true);
+            Check(nfa.Recognize("BA") == true);
+            Check(nfa.Recognize("B") == false);
+            Check(nfa.Recognize("BAA") == false);
+
+            pattern = "\\.";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize(".") == true);
+            Check(nfa.Recognize("A") == false);
+            Check(nfa.Recognize("") == false);
+
+            pattern = "\\.A";
+            nfa = NFA.Build(pattern);
+            Check(nfa.Recognize(".A") == true);
+            Check(nfa.Recognize(".") == false);
+            Check(nfa.Recognize("..") == false);
+            Check(nfa.Recognize("AA") == false);
+
+            nfa = NFA.Build("AB{2-4}|C");
+            Check(nfa.Recognize("C") == true);
+            Check(nfa.Recognize("ABB") == true);
+            Check(nfa.Recognize("AB") == false);
+            Check(nfa.Recognize("ABBBBB") == false);
+
+            nfa = NFA.Build("A{11}");
+            Check(nfa.Recognize("AAAAAAAAAAA") == true);
+
+            nfa = NFA.Build("A{10-20}");
+            Check(nfa.Recognize("AAAAAAAAAA") == true);
+            Check(nfa.Recognize("AAAAAAAAAAAAAAAAAAAAA") == false);
+
+            nfa = NFA.Build("((A+)B)+");
+            Check(nfa.Recognize("A") == false);
+            Check(nfa.Recognize("AB") == true);
+            Check(nfa.Recognize("AABAAB") == true);
+            Check(nfa.Recognize("ABBC") == false);
+
+            nfa = NFA.Build("[AB]");
+            Check(nfa.Recognize("A") == true);
+            Check(nfa.Recognize("B") == true);
+            Check(nfa.Recognize("AB") == false);
+            Check(nfa.Recognize("C") == false);
+
+            nfa = NFA.Build("[ABCDEFG]+");
+            Check(nfa.Recognize("A") == true);
+            Check(nfa.Recognize("AAAB") == true);
+            Check(nfa.Recognize("Z") == false);
+
+            nfa = NFA.Build("[a-zA-Z0-9\\-]");
+            Check(nfa.Recognize("A") == true);
+            Check(nfa.Recognize("1") == true);
+            Check(nfa.Recognize("-") == true);
+            Check(nfa.Recognize("@") == false);
+
+            nfa = NFA.Build("A\tB\nC\rD\\\\E");
+            Check(nfa.Recognize("A\tB\nC\rD\\E") == true);
+        }
+
+        private static void UtStepRecognize()
+        {
+            string re = "A*";
+            NFA nfa = NFA.Build(re);
+            RecognizeParam param = nfa.CreateRecognizeParam();
+            Check(nfa.StepRecognize('A', param) == RecognizeResult.AliveAndAccept);
+            Check(nfa.StepRecognize('A', param) == RecognizeResult.AliveAndAccept);
+            Check(nfa.StepRecognize('A', param) == RecognizeResult.AliveAndAccept);
+            Check(nfa.StepRecognize('B', param) == RecognizeResult.EndAndReject);
+
+            re = "AB";
+            nfa = NFA.Build(re);
+            param = nfa.CreateRecognizeParam();
+            Check(nfa.StepRecognize('A', param) == RecognizeResult.AliveButNotAccept);
+            Check(nfa.StepRecognize('B', param) == RecognizeResult.AliveAndAccept);
+            Check(nfa.StepRecognize('C', param) == RecognizeResult.EndAndReject);
+
+        }
+
         public static void Ut()
         {
             //UtPatternChecker();
@@ -230,6 +416,8 @@ namespace NewRegex
             UtTransformSquareBracket();
             UtModifyParentsisBetweenOr();
             UtTransformSuffix();
+            UtRecognize();
+            UtStepRecognize();
         }
     }
 }

@@ -76,18 +76,19 @@ namespace NewRegex
             return patternChars;
         }
 
-        // \ ^ | . $ ? * + ( ) [ ] { }
+        // \ ^ | . $ ? * + ( ) [ ] { } d D w W s W
         public static List<PatternChar> TransformEscape(List<PatternChar> patternChars)
         {
             List<PatternChar> newPatternChars = new List<PatternChar>();
-            List<char> escapedChars = new List<char>() { '\\', '^', '|', '.', '$', '?', '*', '+', '(', ')', '[', ']', '{', '}' };
+
+            List<char> escapedChars1 = new List<char>() { '\\', '^', '|', '.', '$', '?', '*', '+', '(', ')', '[', ']', '{', '}', 'd', 'D', 'w', 'W', 's', 'S' };
 
             for (int i = 0; i < patternChars.Count; i++)
             {
                 PatternChar c = patternChars[i];
                 if (c.c == '\\' && i < patternChars.Count)
                 {
-                    if (escapedChars.Contains(patternChars[i + 1].c))
+                    if (escapedChars1.Contains(patternChars[i + 1].c))
                     {
                         newPatternChars.Add(new PatternChar(patternChars[i + 1].c, true));
                         i++;
@@ -110,7 +111,9 @@ namespace NewRegex
                 }
                 else
                 {
-                    if (escapedChars.Contains(c.c))
+                    List<char> escapedChars2 = new List<char>() { '\\', '^', '|', '.', '$', '?', '*', '+', '(', ')', '[', ']', '{', '}' };
+
+                    if (escapedChars2.Contains(c.c))
                         newPatternChars.Add(new PatternChar(c.c, PatternCharType.MetaChar));
                     else
                         newPatternChars.Add(c);
@@ -142,6 +145,8 @@ namespace NewRegex
                     i = squareEnd + 1;
 
                     PatternChar multipleChar = new PatternChar();
+                    multipleChar.type = PatternCharType.MultipleChar;
+
                     if (patternChars[squareStart + 1].c == '^')
                     {
                         multipleChar.not = true;
@@ -208,8 +213,8 @@ namespace NewRegex
         /*
           \d	[0-9]
           \D	[^0-9]
-          \w	[A-Z0-9]
-          \W	[^A-Z0-9]
+          \w	[a-zA-Z0-9]
+          \W	[^a-zA-Z0-9]
           \s	[ \t\n\r]
           \S	[^ \t\n\r]
         */
@@ -218,24 +223,25 @@ namespace NewRegex
             List<PatternChar> newPatternChars = new List<PatternChar>();
             for (int i = 0; i < patternChars.Count; i++)
             {
-                PatternChar c = patternChars[i];
-                if (c.c == '\\' && i < patternChars.Count)
+                PatternChar pc = patternChars[i];
+                if (pc.escaped && new List<char> { 'd', 'D', 'w', 'W', 's', 'S' }.Contains(pc.c) && i < patternChars.Count)
                 {
-                    if (patternChars[i + 1].c == 'd' || patternChars[i + 1].c == 'D')
+                    PatternChar patternChar = new PatternChar();
+                    patternChar.type = PatternCharType.MultipleChar;
+
+                    if (pc.c == 'd' || pc.c == 'D')
                     {
-                        PatternChar patternChar = new PatternChar();
                         for (char c2 = '0'; c2 <= '9'; c2++)
                             patternChar.multipleChars.Add(c2);
 
-                        if (patternChars[i + 1].c == 'D')
+                        if (pc.c == 'D')
                             patternChar.not = true;
 
                         newPatternChars.Add(patternChar);
                         i++;
                     }
-                    else if (patternChars[i + 1].c == 'w' || patternChars[i + 1].c == 'W')
+                    else if (pc.c == 'w' || pc.c == 'W')
                     {
-                        PatternChar patternChar = new PatternChar();
                         for (char c2 = '0'; c2 <= '9'; c2++)
                             patternChar.multipleChars.Add(c2);
                         for (char c2 = 'a'; c2 <= 'z'; c2++)
@@ -243,21 +249,20 @@ namespace NewRegex
                         for (char c2 = 'A'; c2 <= 'Z'; c2++)
                             patternChar.multipleChars.Add(c2);
 
-                        if (patternChars[i + 1].c == 'W')
+                        if (pc.c == 'W')
                             patternChar.not = true;
 
                         newPatternChars.Add(patternChar);
                         i++;
                     }
-                    else if (patternChars[i + 1].c == 's' || patternChars[i + 1].c == 'S')
+                    else if (pc.c == 's' || pc.c == 'S')
                     {
-                        PatternChar patternChar = new PatternChar();
                         patternChar.multipleChars.Add(' ');
                         patternChar.multipleChars.Add('t');
                         patternChar.multipleChars.Add('n');
                         patternChar.multipleChars.Add('r');
 
-                        if (patternChars[i + 1].c == 'S')
+                        if (pc.c == 'S')
                             patternChar.not = true;
 
                         newPatternChars.Add(patternChar);
@@ -266,7 +271,7 @@ namespace NewRegex
                 }
                 else
                 {
-                    newPatternChars.Add(c);
+                    newPatternChars.Add(pc);
                 }
             }
 
@@ -410,41 +415,62 @@ namespace NewRegex
                         if (c.c == '+')
                         {
                             keepGoing = true;
+                            j--;
                         }
                         else if (c.c == '?')
                         {
                             keepGoing = true;
+                            j--;
                         }
                         else if (c.c == '}')
                         {
                             keepGoing = true;
 
-                            if (newPatternChars[j - 2].c == '{')
+                            // A{3}
+                            // A{3-}
+                            // A{2-4}
+                            int rightCurlyBracket = j;
+                            int leftCurlyBracket = j - 1;
+                            for (; !(newPatternChars[leftCurlyBracket].c == '{' && newPatternChars[leftCurlyBracket].type == PatternCharType.MetaChar); leftCurlyBracket--)
+                                ;
+
+                            int dash = leftCurlyBracket + 1;
+                            for (; newPatternChars[dash].c != '-' && dash < rightCurlyBracket; dash++)
+                                ;
+
+                            string temp = "";
+                            if (dash == rightCurlyBracket)
                             {
-                                // A{3} = AAA
-                                countStart = int.Parse("" + newPatternChars[j - 1].c);
+                                // A{3}
+                                for (int k = leftCurlyBracket + 1; k < rightCurlyBracket; k++)
+                                    temp += newPatternChars[k].c;
+                                countStart = int.Parse(temp);
                                 countEnd = countStart;
-                                j -= 2;
                             }
-                            else if (newPatternChars[j - 3].c == '{')
+                            else if (dash + 1 != rightCurlyBracket)
                             {
-                                // A{3-} = AAAA*
-                                countStart = int.Parse("" + newPatternChars[j - 2].c);
-                                j -= 3;
-                            }
-                            else if (newPatternChars[j - 4].c == '{')
-                            {
-                                // A{2-4} = (AA|AAA|AAAA)
-                                countStart = int.Parse("" + newPatternChars[j - 3].c);
-                                countEnd = int.Parse("" + newPatternChars[j - 1].c);
-                                j -= 4;
+                                // A{2-4}
+                                temp = "";
+                                for (int k = leftCurlyBracket + 1; k < dash; k++)
+                                    temp += newPatternChars[k].c;
+                                countStart = int.Parse(temp);
+
+                                temp = "";
+                                for (int k = dash + 1; k < rightCurlyBracket; k++)
+                                    temp += newPatternChars[k].c;
+                                countEnd = int.Parse(temp);
                             }
                             else
                             {
-                                Trace.Assert(false);
+                                // A{3-}
+                                temp = "";
+                                for (int k = leftCurlyBracket + 1; k < dash; k++)
+                                    temp += newPatternChars[k].c;
+                                countStart = int.Parse(temp);
                             }
+
+                            j = leftCurlyBracket - 1;
                         }
-                        j--;
 
                         // a+ => subRe = a
                         // (abc)+ => subRe = (abc)
@@ -572,7 +598,6 @@ namespace NewRegex
             patternChars = TransformSquareBracket(patternChars);
             patternChars = ModifyParentsisBetweenOr(patternChars);
             patternChars = TransformSuffix(patternChars);
-
 
             return patternChars;
         }
