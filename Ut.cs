@@ -404,6 +404,13 @@ public class UtAll
         nfa = NFA.Build("^[1-9][0-9]{3}\\-[0-3][0-9]\\-[0-3][0-9]");
         Check(nfa.Recognize("2024-12-25") == true);
         Check(nfa.Recognize("024-99-99") == false);
+
+        nfa = NFA.Build("'([^']|'')*'");
+        Check(nfa.Recognize("''") == true);
+        Check(nfa.Recognize("'abc'") == true);
+        Check(nfa.Recognize("'a''bc'") == true);
+        Check(nfa.Recognize("'a''bc'''") == true);
+        Check(nfa.Recognize("'a''bc''") == false);
     }
 
     private static void UtStepRecognize()
