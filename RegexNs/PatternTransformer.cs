@@ -219,7 +219,6 @@
                             patternChar.not = true;
 
                         newPatternChars.Add(patternChar);
-                        i++;
                     }
                     else if (pc.c == 'w' || pc.c == 'W')
                     {
@@ -234,7 +233,6 @@
                             patternChar.not = true;
 
                         newPatternChars.Add(patternChar);
-                        i++;
                     }
                     else if (pc.c == 's' || pc.c == 'S')
                     {
@@ -247,7 +245,6 @@
                             patternChar.not = true;
 
                         newPatternChars.Add(patternChar);
-                        i++;
                     }
                 }
                 else

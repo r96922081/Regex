@@ -411,6 +411,11 @@ public class UtAll
         Check(nfa.Recognize("'a''bc'") == true);
         Check(nfa.Recognize("'a''bc'''") == true);
         Check(nfa.Recognize("'a''bc''") == false);
+
+        nfa = NFA.Build("-?\\d+(\\.\\d+)?");
+        Check(nfa.Recognize("123") == true);
+        Check(nfa.Recognize("123.456") == true);
+        Check(nfa.Recognize("-123.456") == true);
     }
 
     private static void UtStepRecognize()
