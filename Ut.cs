@@ -416,6 +416,13 @@ public class UtAll
         Check(nfa.Recognize("123") == true);
         Check(nfa.Recognize("123.456") == true);
         Check(nfa.Recognize("-123.456") == true);
+
+        nfa = NFA.Build("'[ -~]'");
+        Check(nfa.Recognize("") == false);
+        Check(nfa.Recognize("' '") == true);
+        Check(nfa.Recognize("'a'") == true);
+        Check(nfa.Recognize("'-'") == true);
+        Check(nfa.Recognize("'ab'") == false);
     }
 
     private static void UtStepRecognize()
