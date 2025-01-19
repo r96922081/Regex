@@ -417,12 +417,21 @@ public class UtAll
         Check(nfa.Recognize("123.456") == true);
         Check(nfa.Recognize("-123.456") == true);
 
+        // char, 'A', 'B', ...
         nfa = NFA.Build("'[ -~]'");
         Check(nfa.Recognize("") == false);
         Check(nfa.Recognize("' '") == true);
         Check(nfa.Recognize("'a'") == true);
         Check(nfa.Recognize("'-'") == true);
         Check(nfa.Recognize("'ab'") == false);
+
+        // single line comment
+        nfa = NFA.Build("//[^\n]*");
+        Check(nfa.Recognize("//") == true);
+        Check(nfa.Recognize("//abc") == true);
+        Check(nfa.Recognize("//abc\r") == true);
+        Check(nfa.Recognize("////////") == true);
+        Check(nfa.Recognize("//\n") == false);
     }
 
     private static void UtStepRecognize()
