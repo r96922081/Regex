@@ -432,6 +432,12 @@ public class UtAll
         Check(nfa.Recognize("//abc\r") == true);
         Check(nfa.Recognize("////////") == true);
         Check(nfa.Recognize("//\n") == false);
+
+        // string literal
+        nfa = NFA.Build("\\\"[^\"]*\\\"");
+        Check(nfa.Recognize("\"\"") == true);
+        Check(nfa.Recognize("\"abc\"") == true);
+        Check(nfa.Recognize("\"abc\"x") == false);
     }
 
     private static void UtStepRecognize()
