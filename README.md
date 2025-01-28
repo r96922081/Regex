@@ -2,7 +2,7 @@
 
 
 # Regex
-Regular expression engine.  It can test if an input is accpeted or rejected by a pattern. and find matched sub-strings of a specifc pattern
+Regular expression engine.  It can test if an input is accpeted or rejected by a pattern or find matched substrings of a pattern
 
 **Recognize**
 
@@ -21,20 +21,36 @@ Regular expression engine.  It can test if an input is accpeted or rejected by a
     2024-12-25 is accpeted
     2024-99-99,  2024-3-02 are rejected
 
-**Find first match:**
+**Find first match**
 
     Ex1:
     Pattern = (AB)+
     Input = XABABXABABAB
     First match = ABAB
 
-**Find all matches:**
+**Find all matches**
 
     Ex1:
     Pattern = [a-zA-Z0-9\\.\\-]+@[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)+    
     Input = My emails: my-account@gmail.com, my-account@yahoo.com. Welcome to mail me
     All matches: my-account@gmail.com, my-account@yahoo.com
 
+## How to Use
+**Recognize**
+
+
+        string pattern = "[1-9][0-9]{3}\\-[0-3][0-9]\\-[0-3][0-9]";
+        string Input = "2024-12-25";
+        Console.WriteLine(Regex.Recognize(pattern, Input)); // true
+
+**Find all matches**
+
+
+        string pattern = "[a-zA-Z0-9\\.\\-]+@[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)+";
+        string input = "Here are my emails: my-account@gmail.com, my-account@yahoo.com!";
+        List<string> matches = Regex.MatchAll(pattern, input);
+        Console.WriteLine(matches[0]); // my-account@gmail.com
+        Console.WriteLine(matches[1]); // my-account@yahoo.com
 
 ## **Algorithm/Code Explanation**
 
