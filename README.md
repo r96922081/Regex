@@ -6,15 +6,34 @@ Regular expression engine.  It can test if an input is accpeted or rejected by a
 
 **Recognize**
 
-    Pattern = "[1-9][0-9]{3}-[0-3][0-9]-[0-3][0-9]";
-    "2024-12-25" is accpeted
-    "2024-99-99" is rejected
+    Ex1:
+    Pattern = ((A+)B)+
+    AB, AABAAB are accepted
+    A, ABBC are rejected
+    
+    Ex2:
+    Pattern = -?\\d+(\\.\\d+)?
+    123, 123.456, -123.456 are accepted
+    +123, 123x are rejected
+    
+    Ex3:
+    Pattern = [1-9][0-9]{3}-[0-1][0-9]-[0-3][0-9];
+    2024-12-25 is accpeted
+    2024-99-99,  2024-3-02 are rejected
+
+**Find first match:**
+
+    Ex1:
+    Pattern = (AB)+
+    Input = XABABXABABAB
+    First match = ABAB
 
 **Find all matches:**
 
-    emailPattern = "[a-zA-Z0-9\\.-]+@[a-zA-Z0-9-](\\.[a-zA-Z0-9-])+";
-    Input = "Here are my emails: x96922081x@gmail.com, my-account@yahoo.com. Welcome to mail me";
-    matched sub-strings: "x96922081x@gmail.com", "my-account@yahoo.com"
+    Ex1:
+    Pattern = [a-zA-Z0-9\\.\\-]+@[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)+    
+    Input = My emails: my-account@gmail.com, my-account@yahoo.com. Welcome to mail me
+    All matches: my-account@gmail.com, my-account@yahoo.com
 
 
 ## **Algorithm/Code Explanation**
