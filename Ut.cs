@@ -473,7 +473,7 @@ public class UtAll
         Check(nfa.Match("A") == "");
         Check(nfa.Match("ABB") == "AB");
         Check(nfa.Match("ABABABB") == "ABABAB");
-        Check(nfa.Match("XABABABB") == "ABABAB");
+        Check(nfa.Match("XABABXABABAB") == "ABAB");
 
         nfa = NFA.Build("^AB+");
         Check(nfa.Match("ABBBC") == "ABBB");
