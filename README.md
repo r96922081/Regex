@@ -63,11 +63,11 @@ Regular expression engine.  It can test if an input is accpeted or rejected by a
 
 **NFA Example**
 1.  AB\*\
-![](https://r96922081.github.io/images/regex/nfa1.png)\
+![](https://r96922081.github.io/Regex/nfa1.png)
 2.  (AB)\*\
-![](https://r96922081.github.io/images/regex/nfa5.png)
+![](https://r96922081.github.io/Regex/nfa5.png)
 3.  (A|B)C\
-![](https://r96922081.github.io/images/regex/nfa6.png)
+![](https://r96922081.github.io/Regex/nfa6.png)
 
 **Details of Building NFA**
 
@@ -76,11 +76,11 @@ Regular expression engine.  It can test if an input is accpeted or rejected by a
 3. Add ε transition for meta charater *, (, ), |\
 3.1 Add ε transition to (, )\
 3.2 If \* is not after (), then add ε transition (dashed line): \
-![](https://r96922081.github.io/images/regex/nfa2.png)\
+![](https://r96922081.github.io/Regex/nfa2.png)\
 3.3 If \* is after (), then\
-![](https://r96922081.github.io/images/regex/nfa3.png)\
+![](https://r96922081.github.io/Regex/nfa3.png)\
 3.4 For | add ε\
-![](https://r96922081.github.io/images/regex/nfa4.png)\
+![](https://r96922081.github.io/Regex/nfa4.png)
 
 
 **META characters**
