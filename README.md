@@ -5,7 +5,7 @@ Regular expression engine.  It can test if an input is accpeted by a pattern and
 
 ![enter image description here](https://r96922081.github.io/Regex/accept1.png)
 
-## Extract string from text
+## Extract strings
 
 Extract email:\
 ![enter image description here](https://r96922081.github.io/Regex/match1.png)
