@@ -1,7 +1,7 @@
 # Regex
 Regular expression engine.  It can test if an input is accpeted by a pattern and find matched substrings from input by a pattern
 
-## Test if text is accpeted?
+## Is text accpeted?
 
 ![enter image description here](https://r96922081.github.io/Regex/accept1.png)
 
