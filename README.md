@@ -1,5 +1,5 @@
 # Regex
-Regular expression engine.  It can test if an input is accpeted or rejected by a pattern or find matched substrings of a pattern
+Regular expression engine.  It can test if an input is accpeted by a pattern and find matched substrings from input by a pattern
 
 ## Test if text is accpeted?
 
